@@ -1,0 +1,65 @@
+#!/usr/bin/env ruby
+
+# ---------------------------------------------------------------------------- #
+# Copyright 2002-2016, OpenNebula Project, OpenNebula Systems                  #
+#                                                                              #
+# Licensed under the Apache License, Version 2.0 (the "License"); you may      #
+# not use this file except in compliance with the License. You may obtain      #
+# a copy of the License at                                                     #
+#                                                                              #
+# http://www.apache.org/licenses/LICENSE-2.0                                   #
+#                                                                              #
+# Unless required by applicable law or agreed to in writing, software          #
+# distributed under the License is distributed on an "AS IS" BASIS,            #
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.     #
+# See the License for the specific language governing permissions and          #
+# limitations under the License.                                               #
+# ---------------------------------------------------------------------------- #
+
+ONE_LOCATION=ENV["ONE_LOCATION"] if !defined?(ONE_LOCATION)
+
+if !ONE_LOCATION
+    RUBY_LIB_LOCATION="/usr/lib/one/ruby" if !defined?(RUBY_LIB_LOCATION)
+else
+    RUBY_LIB_LOCATION=ONE_LOCATION+"/lib/ruby" if !defined?(RUBY_LIB_LOCATION)
+end
+
+$: << RUBY_LIB_LOCATION
+$: << File.dirname(__FILE__)
+
+require 'vcenter_driver'
+require 'opennebula'
+
+dfile = ARGV[0]
+host  = ARGV[1]
+vm_id = ARGV[2]
+
+drv_action_enc = STDIN.read.gsub("\n","")
+
+drv_action = OpenNebula::XMLElement.new
+drv_action.initialize_xml(Base64.decode64(drv_action_enc),
+                          'VM')
+
+deploy_id     = drv_action["/VM/DEPLOY_ID"]
+lcm_state_num = drv_action["/VM/LCM_STATE"].to_i
+datastore     = drv_action["/VM/USER_TEMPLATE/VCENTER_DATASTORE"]
+lcm_state     = OpenNebula::VirtualMachine::LCM_STATE[lcm_state_num]
+
+ops = {
+    :ref    => drv_action["/VM/USER_TEMPLATE/PUBLIC_CLOUD/VCENTER_REF"],
+    :name   => drv_action["/VM/USER_TEMPLATE/PUBLIC_CLOUD/VCENTER_NAME"]
+}
+
+begin
+    puts VCenterDriver::VCenterVm.deploy(File.read(dfile),
+                                         lcm_state,
+                                         deploy_id,
+                                         host,
+                                         datastore,
+                                         ops)
+rescue Exception => e
+    STDERR.puts "Deploy of VM #{vm_id} on host #{host} with #{dfile} failed " +
+                "due to \"#{e.message}\""
+    exit -1
+end
+
