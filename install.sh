@@ -1858,6 +1858,6 @@ if [ "$UNINSTALL" = "no" ] ; then
     done
 else
     for d in `echo $DELETE_DIRS | awk '{for (i=NF;i>=1;i--) printf $i" "}'`; do
-        rmdir $d
+        rm -rf $d
     done
 fi
