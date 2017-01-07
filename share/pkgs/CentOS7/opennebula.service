@@ -4,6 +4,7 @@ After=syslog.target
 After=network.target
 After=remote-fs.target
 After=mariadb.service
+After=mysql.service
 Before=opennebula-scheduler.service
 BindTo=opennebula-scheduler.service
 
