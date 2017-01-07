@@ -1769,7 +1769,7 @@ fi
 
 do_file() {
     if [ "$UNINSTALL" = "yes" ]; then
-        rm $DESTDIR$2/`basename $1`
+        rm -rf $DESTDIR$2/`basename $1`
     else
         if [ "$LINK" = "yes" ]; then
             ln -s $SRC_DIR/$1 $DESTDIR$2
