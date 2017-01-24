@@ -137,6 +137,23 @@ private:
     pthread_mutex_t log_mutex;
 };
 
+class ERFFileLog : public Log
+{
+public:
+    ERFFileLog(const string&       file_name,
+            const MessageType   level    = WARNING,
+            ios_base::openmode  mode     = ios_base::app);
+
+    virtual ~ERFFileLog();
+
+    virtual void log(
+        const char *            module,
+        const MessageType       type,
+        const char *            message);
+
+private:
+    string log_file_name;
+};
 
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */

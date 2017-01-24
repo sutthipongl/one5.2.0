@@ -104,6 +104,85 @@ void FileLog::log(
     }
 }
 
+ERFFileLog::ERFFileLog(const string&   file_name,
+                 const MessageType   level,
+                 ios_base::openmode  mode)
+        :Log(level), log_file_name(file_name)
+{
+    ofstream file;
+
+    file.open(log_file_name.c_str(), mode);
+
+    if (file.fail() == true)
+    {
+        throw runtime_error("Could not open log file");
+    }
+
+    if ( file.is_open() == true )
+    {
+        file.close();
+    }
+}
+
+/* -------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
+
+ERFFileLog::~ERFFileLog() { }
+
+/* -------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
+
+void ERFFileLog::log(
+    const char *            module,
+    const MessageType       type,
+    const char *            message)
+{
+    char        str[26];
+    time_t      the_time;
+    ofstream    file;
+
+    if( type <= log_level)
+    {
+        file.open(log_file_name.c_str(), ios_base::app);
+
+        if (file.fail() == true)
+        {
+            return;
+        }
+
+        the_time = time(NULL);
+
+#ifdef SOLARIS
+        ctime_r(&(the_time),str,sizeof(char)*26);
+#else
+        ctime_r(&(the_time),str);
+#endif
+        // Get rid of final enter character
+              str[24] = '\0';
+
+              string temp ;
+              stringstream ss;
+              ss << zone_id ;
+
+              temp.append(str);
+              temp.append("[Z");
+              temp.append(ss.str());
+              temp.append("][");
+              temp.append(module);
+              temp.append("][");
+              temp+=error_names[type];
+              temp.append("][ERF]: ");
+              temp.append(message);
+
+              file << temp << endl;
+
+              file.flush();
+
+              file.close();
+    }
+}
+
+
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 

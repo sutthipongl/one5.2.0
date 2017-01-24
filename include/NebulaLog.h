@@ -36,7 +36,8 @@ public:
         FILE_TS    = 1,
         STD        = 2,
         SYSLOG     = 3,
-        UNDEFINED  = 4
+        UNDEFINED  = 4,
+		ERF        = 5
     };
 
     // ---------------------------------------------------------------
@@ -63,6 +64,9 @@ public:
             case SYSLOG:
                 NebulaLog::logger = new SysLog(clevel, daemon);
                 break;
+            case ERF:
+				NebulaLog::logger = new ERFFileLog(filename,clevel,mode);
+            	break;
             default:
                 NebulaLog::logger = new StdLog(clevel);
                 break;
@@ -84,6 +88,10 @@ public:
         else if (type == "STD")
         {
             return STD;
+        }
+        else if (type == "ERF")
+        {
+        	return ERF;
         }
 
         return UNDEFINED;
