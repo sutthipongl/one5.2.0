@@ -37,7 +37,8 @@ public:
         STD        = 2,
         SYSLOG     = 3,
         UNDEFINED  = 4,
-		ERF        = 5
+		ERF        = 5,
+		ERFTS      = 6
     };
 
     // ---------------------------------------------------------------
@@ -51,26 +52,29 @@ public:
         ios_base::openmode  mode,
         const string&       daemon)
     {
-        _log_type = ltype;
+    	 _log_type = ltype;
 
-        switch(ltype)
-        {
-            case FILE:
-                NebulaLog::logger = new FileLog(filename, clevel, mode);
-                break;
-            case FILE_TS:
-                NebulaLog::logger = new FileLogTS(filename, clevel, mode);
-                break;
-            case SYSLOG:
-                NebulaLog::logger = new SysLog(clevel, daemon);
-                break;
-            case ERF:
-				NebulaLog::logger = new ERFFileLog(filename,clevel,mode);
-            	break;
-            default:
-                NebulaLog::logger = new StdLog(clevel);
-                break;
-        }
+    	        switch(ltype)
+    	        {
+    	            case FILE:
+    	                NebulaLog::logger = new FileLog(filename, clevel, mode);
+    	                break;
+    	            case FILE_TS:
+    	                NebulaLog::logger = new FileLogTS(filename, clevel, mode);
+    	                break;
+    	            case SYSLOG:
+    	                NebulaLog::logger = new SysLog(clevel, daemon);
+    	                break;
+    	            case ERF:
+    					NebulaLog::logger = new ERFFileLog(filename,clevel,mode);
+    	            	break;
+    	            case ERFTS:
+    	                NebulaLog::logger = new ERFFileLogTS(filename,clevel,mode);
+    	                break;
+    	            default:
+    	                NebulaLog::logger = new StdLog(clevel);
+    	                break;
+    	        }
     };
 
     static LogType str_to_type(string& type)
@@ -92,6 +96,10 @@ public:
         else if (type == "ERF")
         {
         	return ERF;
+        }
+        else if (type == "ERFTS")
+        {
+        	return ERFTS;
         }
 
         return UNDEFINED;

@@ -155,6 +155,36 @@ private:
     string log_file_name;
 };
 
+class ERFFileLogTS : public ERFFileLog
+{
+public:
+    ERFFileLogTS(const string&       file_name,
+                    const MessageType   level    = WARNING,
+                    ios_base::openmode  mode     = ios_base::app)
+                       :ERFFileLog(file_name,level,mode)
+    {
+        pthread_mutex_init(&log_mutex,0);
+    }
+
+    ~ERFFileLogTS()
+    {
+        pthread_mutex_destroy(&log_mutex);
+    }
+
+    void log(
+        const char *            module,
+        const MessageType       type,
+        const char *            message)
+    {
+        pthread_mutex_lock(&log_mutex);
+        ERFFileLog::log(module,type,message);
+        pthread_mutex_unlock(&log_mutex);
+    }
+
+private:
+    pthread_mutex_t log_mutex;
+};
+
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 
