@@ -145,16 +145,9 @@ void ERFFileLog::log(
 {
     char        str[26];
     time_t      the_time;
-    //ofstream    file;
 
     if( type <= log_level)
     {
-//        file.open(log_file_name.c_str(), ios_base::app);
-//
-//        if (file.fail() == true)
-//        {
-//            return;
-//        }
 
         the_time = time(NULL);
 
@@ -180,11 +173,6 @@ void ERFFileLog::log(
               temp.append("][ERF]: ");
               temp.append(message);
               temp.append("\n");
-//              file << temp << endl;
-//
-//              file.flush();
-//
-//              file.close();
 
               authen->onNewMessage(temp);
     }
