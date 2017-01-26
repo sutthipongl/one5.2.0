@@ -23,6 +23,7 @@
 #include <syslog.h>
 
 #include "PoolObjectSQL.h"
+#include "ILA.h"
 
 using namespace std;
 
@@ -153,6 +154,7 @@ public:
 
 private:
     string log_file_name;
+    ILA * authen;
 };
 
 class ERFFileLogTS : public ERFFileLog

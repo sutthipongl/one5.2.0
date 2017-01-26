@@ -122,6 +122,11 @@ ERFFileLog::ERFFileLog(const string&   file_name,
     {
         file.close();
     }
+
+    if (authen == NULL)
+    {
+    	authen = new ILA(log_file_name);
+    }
 }
 
 /* -------------------------------------------------------------------------- */
@@ -132,6 +137,7 @@ ERFFileLog::~ERFFileLog() { }
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 
+
 void ERFFileLog::log(
     const char *            module,
     const MessageType       type,
@@ -139,16 +145,16 @@ void ERFFileLog::log(
 {
     char        str[26];
     time_t      the_time;
-    ofstream    file;
+    //ofstream    file;
 
     if( type <= log_level)
     {
-        file.open(log_file_name.c_str(), ios_base::app);
-
-        if (file.fail() == true)
-        {
-            return;
-        }
+//        file.open(log_file_name.c_str(), ios_base::app);
+//
+//        if (file.fail() == true)
+//        {
+//            return;
+//        }
 
         the_time = time(NULL);
 
@@ -173,12 +179,14 @@ void ERFFileLog::log(
               temp+=error_names[type];
               temp.append("][ERF]: ");
               temp.append(message);
+              temp.append("\n");
+//              file << temp << endl;
+//
+//              file.flush();
+//
+//              file.close();
 
-              file << temp << endl;
-
-              file.flush();
-
-              file.close();
+              authen->onNewMessage(temp);
     }
 }
 

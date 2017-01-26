@@ -41,7 +41,8 @@ sched_env.Prepend(LIBS=[
     'nebula_vm',
     'nebula_host',
     'crypto',
-    'xml2'
+    'xml2',
+    'erf'
 ])
 
 if not sched_env.GetOption('clean'):

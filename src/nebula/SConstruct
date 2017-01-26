@@ -68,7 +68,8 @@ env.Prepend(LIBS=[
     'nebula_marketplace',
     'nebula_ipamm',
     'crypto',
-    'xml2'
+    'xml2',
+    'erf'
 ])
 
 if not env.GetOption('clean'):
