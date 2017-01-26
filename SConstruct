@@ -86,7 +86,8 @@ main_env.Append(LIBPATH=[
     cwd+'/src/vdc',
     cwd+'/src/vrouter',
     cwd+'/src/market',
-    cwd+'/src/ipamm'
+    cwd+'/src/ipamm',
+    cwd+'/src/erf'
 ])
 
 # Compile flags
@@ -247,7 +248,8 @@ build_scripts=[
     'src/sunstone/public/SConstruct',
     'share/rubygems/SConstruct',
     'src/im_mad/collectd/SConstruct',
-    'src/client/SConstruct'
+    'src/client/SConstruct',
+    'src/erf/SConstruct'
 ]
 
 for script in build_scripts:
