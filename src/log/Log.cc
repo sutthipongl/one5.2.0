@@ -123,10 +123,7 @@ ERFFileLog::ERFFileLog(const string&   file_name,
         file.close();
     }
 
-    if (authen == NULL)
-    {
     	authen = new ILA(log_file_name);
-    }
 }
 
 /* -------------------------------------------------------------------------- */
