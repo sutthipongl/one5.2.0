@@ -153,6 +153,7 @@ public:
         const char *            message);
 
 private:
+    const string currentDateTime();
     string log_file_name;
     ILA * authen;
 };
