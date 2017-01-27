@@ -1,0 +1,2 @@
+service opennebula stop
+service opennebula-sunstone stop

@@ -1,0 +1,3 @@
+scons -c
+scons mysql=yes sunstone=yes new_xmlrpc=yes
+sudo ./install.sh -u oneadmin -g oneadmin

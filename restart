@@ -1,0 +1,2 @@
+service opennebula restart
+service opennebula-sunstone restart
