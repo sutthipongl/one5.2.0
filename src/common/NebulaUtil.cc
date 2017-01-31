@@ -182,6 +182,32 @@ string one_util::sha1_digest(const string& in)
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 
+string one_util::sha256_digest(const string& in)
+{
+    EVP_MD_CTX     mdctx;
+    unsigned char  md_value[EVP_MAX_MD_SIZE];
+    unsigned int   md_len;
+    ostringstream  oss;
+
+    EVP_MD_CTX_init(&mdctx);
+    EVP_DigestInit_ex(&mdctx, EVP_sha256(), NULL);
+
+    EVP_DigestUpdate(&mdctx, in.c_str(), in.length());
+
+    EVP_DigestFinal_ex(&mdctx,md_value,&md_len);
+    EVP_MD_CTX_cleanup(&mdctx);
+
+    for(unsigned int i = 0; i<md_len; i++)
+    {
+        oss << setfill('0') << setw(2) << hex << nouppercase
+            << (unsigned short) md_value[i];
+    }
+
+    return oss.str();
+}
+/* -------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
+
 string * one_util::aes256cbc_encrypt(const string& in, const string password)
 {
     EVP_CIPHER_CTX ctx;

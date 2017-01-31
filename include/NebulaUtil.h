@@ -41,6 +41,7 @@ namespace one_util
      *  @return sha1 hash of str
      */
     std::string sha1_digest(const std::string& in);
+    std::string sha256_digest(const std::string& in);
 
    /**
     *  Base 64 encoding
