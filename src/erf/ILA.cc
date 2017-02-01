@@ -56,18 +56,25 @@ void ILA::writeFile(string s)
 
 void ILA::updateDB(string curr_hash){
 
-//	  ostringstream oss;
-//	  oss << "SELECT last_oid FROM pool_control WHERE filename='"<<filename<<"'";
-//	  ILADB->exec(oss);
+	  ostringstream oss;
+	  oss << "UPDATE ERF SET hash=\"" << curr_hash << "\" WHERE filename=\""<<filename<<"\"";
+
+	  if (mysql_query(db,oss.str().c_str()))
+	    {
+	  		cout << "ERF : FAIL execute " << oss.str() << endl;
+	    }
+
 }
 
 
 //DEBUG purpose
 void ILA::writeDebugFile(string s)
 {
-
 	 ofstream    file;
-	 file.open("/var/log/one/debug.log", ios_base::app);
+	 ostringstream debugfilename;
+
+	 debugfilename <<  filename << "_debug" ;
+	 file.open(debugfilename.str().c_str(), ios_base::app);
 
 	if (file.fail() == true)
 	{
@@ -77,7 +84,6 @@ void ILA::writeDebugFile(string s)
 	file << s << endl;
 	file.flush();
 	file.close();
-
 
 }
 
