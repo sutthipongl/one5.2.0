@@ -1,3 +1,2 @@
-rm /var/log/one/*
 service opennebula start
 service opennebula-sunstone start
