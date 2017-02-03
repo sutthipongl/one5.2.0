@@ -142,7 +142,7 @@ void ILA::onFileNameChange(string newfn)
 
 }
 
-string ILA::getnextfilename(string fn_withdate)
+string ILA::getNextFileName(string fn_withdate)
 {
 	ostringstream oss;
 			oss.str("");
@@ -157,13 +157,16 @@ string ILA::getnextfilename(string fn_withdate)
 			  {
 				  MYSQL_RES *result = mysql_store_result(db);
 
-				  if (result == NULL)
+				  MYSQL_ROW row = mysql_fetch_row(result);
+
+				  if (row == NULL)
 				    {
-				        //This is the first file for that day
+				       //Nothing return, This is the first file for that day
+					  cout << "ERF : No file in DB " << fn_withdate << " is the first one for this day" << endl;
 					  return fn_withdate;
 				    }
 
-				  MYSQL_ROW row = mysql_fetch_row(result);
+
 
 				  string latestfilename = row[0] ;
 

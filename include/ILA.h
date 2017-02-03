@@ -55,7 +55,7 @@ public:
 		  }else
 		  {
 
-			  temp_filename = getnextfilename(temp_filename + "_" + currentDateTime(false));
+			  temp_filename = getNextFileName(temp_filename + "_" + currentDateTime(false));
 
 			  filename = temp_filename + ".log";
 			  erffile = temp_filename + ".erf";
@@ -81,7 +81,7 @@ private:
 	int updateDB(string curr_hash);
 	void insertNewFileToDB(string fn);
 	const string currentDateTime(bool withtime);
-	string getnextfilename(string fn_withdate);
+	string getNextFileName(string fn_withdate);
 
 	string filename;
 	string erffile;
