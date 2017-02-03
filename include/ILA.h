@@ -16,6 +16,7 @@ public:
 	ILA(const string fn):filename(fn){
 
 		s_hash="";
+		string temp_filename = fn.substr(0,fn.length()-4);
 
 		// -----------------------------------------------------------
 		// MYSQL Database
@@ -44,18 +45,30 @@ public:
 		if (mysql_real_connect(db, "localhost","oneadmin","oneadmin", "opennebula",3306, NULL, 0)==NULL)
 		  {
 			  cout << "ERF : ILA DB Connection error" << endl;
-			  mysql_close(db);
+
+			  //If ILA can't connect to DB, use ????
+
+				// Insert timestamp to file
+				filename = temp_filename + "_" + currentDateTime(false) + ".log";
+				erffile = temp_filename + "_" + currentDateTime(false) + ".erf";
+
+		  }else
+		  {
+
+			  temp_filename = getnextfilename(temp_filename + "_" + currentDateTime(false));
+
+			  filename = temp_filename + ".log";
+			  erffile = temp_filename + ".erf";
+
+			 // Insert new .log file with blank hash
+			 insertNewFileToDB(filename);
 		  }
 
 
-		// Insert timestamp to file
-		string temp = fn.substr(0,fn.length()-4);
-		filename = temp + "_" + currentDateTime(false) + ".log";
-		erffile = temp + "_" + currentDateTime(false) + ".erf";
 
 
-		// Insert new .log file with blank hash
-		insertNewFileToDB(filename);
+
+
 
 	};
 	void onNewMessage(string s);
@@ -68,6 +81,7 @@ private:
 	int updateDB(string curr_hash);
 	void insertNewFileToDB(string fn);
 	const string currentDateTime(bool withtime);
+	string getnextfilename(string fn_withdate);
 
 	string filename;
 	string erffile;

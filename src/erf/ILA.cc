@@ -142,6 +142,55 @@ void ILA::onFileNameChange(string newfn)
 
 }
 
+string ILA::getnextfilename(string fn_withdate)
+{
+	ostringstream oss;
+			oss.str("");
+			oss << "SELECT filename FROM ERF where filename like '" << fn_withdate << "%' order by filename DESC LIMIT 1;" ;
+
+			if (mysql_query(db,oss.str().c_str()))
+			  {
+					cout << "ERF : FAIL running " << oss.str() << endl;
+					cout << mysql_error(db) << endl;
+
+			  }else
+			  {
+				  MYSQL_RES *result = mysql_store_result(db);
+
+				  if (result == NULL)
+				    {
+				        //This is the first file for that day
+					  return fn_withdate;
+				    }
+
+				  MYSQL_ROW row = mysql_fetch_row(result);
+
+				  string latestfilename = row[0] ;
+
+				  //check if it's _YYYYMMDD or _YYYYMMDD_X
+				  size_t n = count(latestfilename.begin(),latestfilename.end(),'_');
+				  if (n>1)
+				  {
+					  // file format is _YYYYMMDD_X , file next number
+
+					  string num = latestfilename.substr(latestfilename.rfind("_")+1);
+					  int m = atoi(num.c_str())+1;
+
+					  stringstream ss;
+					  ss << m;
+
+					  return fn_withdate + "_" + ss.str() ;
+
+
+				  }else
+				  { // file format is _YYYYMMDD
+
+					  return fn_withdate + "_1";
+				  }
+			  }
+
+	return fn_withdate;
+}
 
 const string ILA::currentDateTime(bool withtime) {
     time_t     now = time(0);
