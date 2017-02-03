@@ -5,6 +5,7 @@
 #include <iostream> // std::cout, std::ios
 #include <sstream> // std::ostringstream
 #include "mysql/mysql.h"
+#include <mysql/errmsg.h>
 
 using namespace std;
 
@@ -15,18 +16,21 @@ public:
 	ILA(const string fn):filename(fn){
 
 		s_hash="";
-		 ostringstream oss;
 
 		// -----------------------------------------------------------
 		// MYSQL Database
 		// -----------------------------------------------------------
 
-		// CREATE TABLE `opennebula`.`ERF` (
-		//  `filename` VARCHAR(100) NOT NULL,
-		//  `hash` VARCHAR(65) NULL,
-		//  PRIMARY KEY (`filename`));
+//		CREATE TABLE `ERF` (
+//		  `filename` varchar(100) NOT NULL,
+//		  `hash` varchar(65) DEFAULT NULL,
+//		  `lastupdate` datetime DEFAULT NULL,
+//		  PRIMARY KEY (`filename`)
+//		) ;
+
 		// -----------------------------------------------------------
 
+		ostringstream oss;
 		cout <<  "ERF : MySQL client version:" << mysql_get_client_info() << endl;
 
 		db = mysql_init(NULL);
@@ -37,45 +41,36 @@ public:
 		     // exit(1);
 		  }
 
-		if (mysql_real_connect(db, "localhost","oneadmin","oneadmin", NULL,3306, NULL, 0)==NULL)
+		if (mysql_real_connect(db, "localhost","oneadmin","oneadmin", "opennebula",3306, NULL, 0)==NULL)
 		  {
 			  cout << "ERF : ILA DB Connection error" << endl;
 			  mysql_close(db);
-			  //exit(1);
 		  }
 
-		oss.str("");
-		oss << "USE opennebula;";
 
-		//mysql_query return 0 if success
-		// 0 means false in c++
+		// Insert timestamp to file
+		string temp = fn.substr(0,fn.length()-4);
+		filename = temp + "_" + currentDateTime(false) + ".log";
+		erffile = temp + "_" + currentDateTime(false) + ".erf";
 
-		if (mysql_query(db,oss.str().c_str()))
-		  {
-				cout << "ERF : FAIL SELECT opennebula DATABASE" << endl;
-				 mysql_close(db);
-		  }
 
-		// Insert new file with blank hash
-		oss.str("");
-		oss << "INSERT INTO ERF VALUES(\"" << filename << "\",\"\");";
-
-		if (mysql_query(db,oss.str().c_str()))
-		  {
-				cout << "ERF : FAIL running " << oss.str() << endl;
-				mysql_close(db);
-		  }
+		// Insert new .log file with blank hash
+		insertNewFileToDB(filename);
 
 	};
 	void onNewMessage(string s);
+	void onFileNameChange(string newfn);
 
 private:
 
-	void writeFile(string s);
-	void writeDebugFile(string s);
-	void updateDB(string curr_hash);
+	void writeLogFile(string s);
+	void writeERFFile(string s);
+	int updateDB(string curr_hash);
+	void insertNewFileToDB(string fn);
+	const string currentDateTime(bool withtime);
 
 	string filename;
+	string erffile;
 	string s_hash; // current hash
 	MYSQL* db;
 };

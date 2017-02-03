@@ -109,40 +109,11 @@ ERFFileLog::ERFFileLog(const string&   file_name,
                  ios_base::openmode  mode)
         :Log(level), log_file_name(file_name)
 {
-	// Insert timestamp to file
-	string fn = file_name.substr(0,file_name.length()-4);
-	log_file_name = fn + "_" + currentDateTime() + ".log";
-
-
-    ofstream file;
-
-    file.open(log_file_name.c_str(), mode);
-
-    if (file.fail() == true)
-    {
-        throw runtime_error("Could not open log file");
-    }
-
-    if ( file.is_open() == true )
-    {
-        file.close();
-    }
-
+	// Handover log file management to ILA class (padding date, log rotate)
     authen = new ILA(log_file_name);
-
 }
 
-const string ERFFileLog::currentDateTime() {
-    time_t     now = time(0);
-    struct tm  tstruct;
-    char       buf[80];
-    tstruct = *localtime(&now);
-    // Visit http://en.cppreference.com/w/cpp/chrono/c/strftime
-    // for more information about date/time format
-    strftime(buf, sizeof(buf), "%Y%m%d%H%M%S", &tstruct);
 
-    return buf;
-}
 
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
