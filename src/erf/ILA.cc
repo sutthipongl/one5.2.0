@@ -129,13 +129,13 @@ void ILA::insertNewFileToDB(string fn)
 		  }
 }
 
-void ILA::onFileNameChange(string newfn)
+void ILA::onDateChange()
 {
-	cout << "onFilenameChange("<<newfn<<") called" << endl;
+	cout << "onDateChange() called" << endl;
 
 	//Update .log and .erf filename
-	filename  = newfn;
-	erffile = filename.substr(0,filename.length()-4) + ".erf";
+	filename = processname + "_" + currentDateTime(false) + ".log";
+	erffile = processname + "_" + currentDateTime(false) + ".erf";
 
 	insertNewFileToDB(filename);
 

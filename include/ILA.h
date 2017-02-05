@@ -16,7 +16,7 @@ public:
 	ILA(const string fn):filename(fn){
 
 		s_hash="";
-		string temp_filename = fn.substr(0,fn.length()-4);
+	    processname = fn.substr(0,fn.length()-4);
 
 		// -----------------------------------------------------------
 		// MYSQL Database
@@ -49,13 +49,13 @@ public:
 			  //If ILA can't connect to DB, use ????
 
 				// Insert timestamp to file
-				filename = temp_filename + "_" + currentDateTime(false) + ".log";
-				erffile = temp_filename + "_" + currentDateTime(false) + ".erf";
+				filename = processname + "_" + currentDateTime(false) + ".log";
+				erffile = processname + "_" + currentDateTime(false) + ".erf";
 
 		  }else
 		  {
 
-			  temp_filename = getNextFileName(temp_filename + "_" + currentDateTime(false));
+			  string temp_filename = getNextFileName(processname + "_" + currentDateTime(false));
 
 			  filename = temp_filename + ".log";
 			  erffile = temp_filename + ".erf";
@@ -72,7 +72,7 @@ public:
 
 	};
 	void onNewMessage(string s);
-	void onFileNameChange(string newfn);
+	void onDateChange();
 
 private:
 
@@ -83,6 +83,7 @@ private:
 	const string currentDateTime(bool withtime);
 	string getNextFileName(string fn_withdate);
 
+	string processname;
 	string filename;
 	string erffile;
 	string s_hash; // current hash

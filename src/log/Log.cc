@@ -111,6 +111,11 @@ ERFFileLog::ERFFileLog(const string&   file_name,
 {
 	// Handover log file management to ILA class (padding date, log rotate)
     authen = new ILA(log_file_name);
+
+    time_t mytime;
+    mytime = time(0);
+    struct tm* now = localtime(&mytime);
+    curdate = now->tm_mday;
 }
 
 
@@ -160,6 +165,13 @@ void ERFFileLog::log(
               temp.append(message);
               //temp.append("\n");
              // cout << "sending to ILA : " << temp << endl;
+
+              struct tm* now = localtime(&the_time);
+              if(curdate < now->tm_mday)
+              {
+            	  curdate = now->tm_mday;
+            	  authen->onDateChange();
+              }
 
               authen->onNewMessage(temp);
     }
