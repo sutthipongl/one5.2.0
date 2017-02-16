@@ -1,0 +1,330 @@
+Wed Feb 15 23:55:33 2017[Z0][ONE][I][ERF3]: Starting OpenNebula 5.2.0
+----------------------------------------
+     OpenNebula Configuration File      
+----------------------------------------
+AUTH_MAD=AUTHN=ssh,x509,ldap,server_cipher,server_x509,EXECUTABLE=one_auth_mad
+AUTH_MAD_CONF=DRIVER_MANAGED_GROUPS=NO,MAX_TOKEN_TIME=-1,NAME=core,PASSWORD_CHANGE=YES
+AUTH_MAD_CONF=DRIVER_MANAGED_GROUPS=NO,MAX_TOKEN_TIME=-1,NAME=public,PASSWORD_CHANGE=NO
+AUTH_MAD_CONF=DRIVER_MANAGED_GROUPS=NO,MAX_TOKEN_TIME=-1,NAME=ssh,PASSWORD_CHANGE=YES
+AUTH_MAD_CONF=DRIVER_MANAGED_GROUPS=NO,MAX_TOKEN_TIME=-1,NAME=x509,PASSWORD_CHANGE=NO
+AUTH_MAD_CONF=DRIVER_MANAGED_GROUPS=YES,MAX_TOKEN_TIME=86400,NAME=ldap,PASSWORD_CHANGE=YES
+AUTH_MAD_CONF=DRIVER_MANAGED_GROUPS=NO,MAX_TOKEN_TIME=-1,NAME=server_cipher,PASSWORD_CHANGE=NO
+AUTH_MAD_CONF=DRIVER_MANAGED_GROUPS=NO,MAX_TOKEN_TIME=-1,NAME=server_x509,PASSWORD_CHANGE=NO
+DATASTORE_CAPACITY_CHECK=yes
+DATASTORE_LOCATION=/var/lib/one//datastores
+DATASTORE_MAD=ARGUMENTS=-t 15 -d dummy,fs,lvm,ceph,dev,iscsi_libvirt,vcenter -s shared,ssh,ceph,fs_lvm,qcow2,EXECUTABLE=one_datastore
+DB=BACKEND=mysql,DB_NAME=opennebula,PASSWD=oneadmin,PORT=3306,SERVER=localhost,USER=oneadmin
+DEFAULT_AUTH=default
+DEFAULT_CDROM_DEVICE_PREFIX=hd
+DEFAULT_COST=CPU_COST=0,DISK_COST=0,MEMORY_COST=0
+DEFAULT_DEVICE_PREFIX=hd
+DEFAULT_IMAGE_TYPE=OS
+DEFAULT_UMASK=177
+DS_MAD_CONF=MARKETPLACE_ACTIONS=export,NAME=ceph,PERSISTENT_ONLY=NO,REQUIRED_ATTRS=DISK_TYPE,BRIDGE_LIST
+DS_MAD_CONF=NAME=dev,PERSISTENT_ONLY=YES,REQUIRED_ATTRS=DISK_TYPE
+DS_MAD_CONF=NAME=iscsi_libvirt,PERSISTENT_ONLY=YES,REQUIRED_ATTRS=DISK_TYPE,ISCSI_HOST
+DS_MAD_CONF=NAME=dummy,PERSISTENT_ONLY=NO,REQUIRED_ATTRS=
+DS_MAD_CONF=MARKETPLACE_ACTIONS=export,NAME=fs,PERSISTENT_ONLY=NO,REQUIRED_ATTRS=
+DS_MAD_CONF=NAME=lvm,PERSISTENT_ONLY=NO,REQUIRED_ATTRS=DISK_TYPE,BRIDGE_LIST
+DS_MAD_CONF=MARKETPLACE_ACTIONS=export,NAME=vcenter,PERSISTENT_ONLY=YES,REQUIRED_ATTRS=VCENTER_CLUSTER
+DS_MAD_CONF=NAME=shared,PERSISTENT_ONLY=NO,REQUIRED_ATTRS=
+DS_MAD_CONF=NAME=ssh,PERSISTENT_ONLY=NO,REQUIRED_ATTRS=
+DS_MAD_CONF=NAME=vmfs,PERSISTENT_ONLY=NO,REQUIRED_ATTRS=BRIDGE_LIST
+ENABLE_OTHER_PERMISSIONS=YES
+FEDERATION=MASTER_ONED=,MODE=STANDALONE,ZONE_ID=0
+HM_MAD=EXECUTABLE=one_hm
+HOST_MONITORING_EXPIRATION_TIME=43200
+HOST_PER_INTERVAL=15
+IMAGE_RESTRICTED_ATTR=SOURCE
+IM_MAD=ARGUMENTS=-p 4124 -f 5 -t 50 -i 20,EXECUTABLE=collectd,NAME=collectd
+IM_MAD=ARGUMENTS=-r 3 -t 15 kvm,EXECUTABLE=one_im_ssh,NAME=kvm,SUNSTONE_NAME=KVM
+INHERIT_DATASTORE_ATTR=CEPH_HOST
+INHERIT_DATASTORE_ATTR=CEPH_SECRET
+INHERIT_DATASTORE_ATTR=CEPH_USER
+INHERIT_DATASTORE_ATTR=CEPH_CONF
+INHERIT_DATASTORE_ATTR=POOL_NAME
+INHERIT_DATASTORE_ATTR=ISCSI_USER
+INHERIT_DATASTORE_ATTR=ISCSI_USAGE
+INHERIT_DATASTORE_ATTR=ISCSI_HOST
+INHERIT_DATASTORE_ATTR=GLUSTER_HOST
+INHERIT_DATASTORE_ATTR=GLUSTER_VOLUME
+INHERIT_DATASTORE_ATTR=DISK_TYPE
+INHERIT_DATASTORE_ATTR=ADAPTER_TYPE
+INHERIT_IMAGE_ATTR=ISCSI_USER
+INHERIT_IMAGE_ATTR=ISCSI_USAGE
+INHERIT_IMAGE_ATTR=ISCSI_HOST
+INHERIT_IMAGE_ATTR=ISCSI_IQN
+INHERIT_IMAGE_ATTR=DISK_TYPE
+INHERIT_IMAGE_ATTR=ADAPTER_TYPE
+INHERIT_VNET_ATTR=VLAN_TAGGED_ID
+INHERIT_VNET_ATTR=FILTER_IP_SPOOFING
+INHERIT_VNET_ATTR=FILTER_MAC_SPOOFING
+INHERIT_VNET_ATTR=MTU
+INHERIT_VNET_ATTR=INBOUND_AVG_BW
+INHERIT_VNET_ATTR=INBOUND_PEAK_BW
+INHERIT_VNET_ATTR=INBOUND_PEAK_KB
+INHERIT_VNET_ATTR=OUTBOUND_AVG_BW
+INHERIT_VNET_ATTR=OUTBOUND_PEAK_BW
+INHERIT_VNET_ATTR=OUTBOUND_PEAK_KB
+IPAM_MAD=ARGUMENTS=-t 1 -i dummy,EXECUTABLE=one_ipam
+KEEPALIVE_MAX_CONN=30
+KEEPALIVE_TIMEOUT=15
+LISTEN_ADDRESS=0.0.0.0
+LOG=DEBUG_LEVEL=3,SYSTEM=ERFTS
+LOG_CALL_FORMAT=Req:%i UID:%u %m invoked %l
+MAC_PREFIX=02:00
+MANAGER_TIMER=15
+MARKET_MAD=ARGUMENTS=-t 15 -m http,s3,one,EXECUTABLE=one_market
+MARKET_MAD_CONF=APP_ACTIONS=monitor,NAME=one,PUBLIC=yes,REQUIRED_ATTRS=,SUNSTONE_NAME=OpenNebula.org Marketplace
+MARKET_MAD_CONF=APP_ACTIONS=create, delete, monitor,NAME=http,REQUIRED_ATTRS=BASE_URL,PUBLIC_DIR,SUNSTONE_NAME=HTTP server
+MARKET_MAD_CONF=APP_ACTIONS=create, delete, monitor,NAME=s3,REQUIRED_ATTRS=ACCESS_KEY_ID,SECRET_ACCESS_KEY,REGION,BUCKET,SUNSTONE_NAME=Amazon S3
+MAX_CONN=15
+MAX_CONN_BACKLOG=15
+MESSAGE_SIZE=1073741824
+MONITORING_INTERVAL=60
+MONITORING_THREADS=50
+NETWORK_SIZE=254
+PCI_PASSTHROUGH_BUS=0x01
+PORT=2633
+RPC_LOG=NO
+SCRIPTS_REMOTE_DIR=/var/tmp/one
+SESSION_EXPIRATION_TIME=900
+TIMEOUT=15
+TM_MAD=ARGUMENTS=-t 15 -d dummy,lvm,shared,fs_lvm,qcow2,ssh,ceph,dev,vcenter,iscsi_libvirt,EXECUTABLE=one_tm
+TM_MAD_CONF=CLONE_TARGET=SYSTEM,DS_MIGRATE=YES,LN_TARGET=NONE,NAME=dummy,SHARED=YES
+TM_MAD_CONF=CLONE_TARGET=SELF,LN_TARGET=NONE,NAME=lvm,SHARED=YES
+TM_MAD_CONF=CLONE_TARGET=SYSTEM,DS_MIGRATE=YES,LN_TARGET=NONE,NAME=shared,SHARED=YES
+TM_MAD_CONF=CLONE_TARGET=SYSTEM,LN_TARGET=SYSTEM,NAME=fs_lvm,SHARED=YES
+TM_MAD_CONF=CLONE_TARGET=SYSTEM,LN_TARGET=NONE,NAME=qcow2,SHARED=YES
+TM_MAD_CONF=CLONE_TARGET=SYSTEM,DS_MIGRATE=YES,LN_TARGET=SYSTEM,NAME=ssh,SHARED=NO
+TM_MAD_CONF=CLONE_TARGET=SELF,DS_MIGRATE=NO,LN_TARGET=NONE,NAME=ceph,SHARED=YES
+TM_MAD_CONF=CLONE_TARGET=SELF,DS_MIGRATE=NO,LN_TARGET=NONE,NAME=iscsi_libvirt,SHARED=YES
+TM_MAD_CONF=CLONE_TARGET=NONE,LN_TARGET=NONE,NAME=dev,SHARED=YES
+TM_MAD_CONF=CLONE_TARGET=NONE,LN_TARGET=NONE,NAME=vcenter,SHARED=YES
+TM_MAD_CONF=CLONE_TARGET=SYSTEM,DS_MIGRATE=NO,LN_TARGET=NONE,NAME=vmfs,SHARED=YES
+VLAN_IDS=RESERVED=0, 1, 4095,START=2
+VM_INDIVIDUAL_MONITORING=no
+VM_MAD=ARGUMENTS=-t 15 -r 0 kvm,DEFAULT=vmm_exec/vmm_exec_kvm.conf,EXECUTABLE=one_vmm_exec,IMPORTED_VMS_ACTIONS=terminate, terminate-hard, hold, release, suspend,
+        resume, delete, reboot, reboot-hard, resched, unresched, disk-attach,
+        disk-detach, nic-attach, nic-detach, snap-create, snap-delete,KEEP_SNAPSHOTS=no,NAME=kvm,SUNSTONE_NAME=KVM,TYPE=kvm
+VM_MONITORING_EXPIRATION_TIME=14400
+VM_PER_INTERVAL=5
+VM_RESTRICTED_ATTR=CONTEXT/FILES
+VM_RESTRICTED_ATTR=NIC/MAC
+VM_RESTRICTED_ATTR=NIC/VLAN_ID
+VM_RESTRICTED_ATTR=NIC/BRIDGE
+VM_RESTRICTED_ATTR=NIC/INBOUND_AVG_BW
+VM_RESTRICTED_ATTR=NIC/INBOUND_PEAK_BW
+VM_RESTRICTED_ATTR=NIC/INBOUND_PEAK_KB
+VM_RESTRICTED_ATTR=NIC/OUTBOUND_AVG_BW
+VM_RESTRICTED_ATTR=NIC/OUTBOUND_PEAK_BW
+VM_RESTRICTED_ATTR=NIC/OUTBOUND_PEAK_KB
+VM_RESTRICTED_ATTR=NIC_DEFAULT/MAC
+VM_RESTRICTED_ATTR=NIC_DEFAULT/VLAN_ID
+VM_RESTRICTED_ATTR=NIC_DEFAULT/BRIDGE
+VM_RESTRICTED_ATTR=DISK/TOTAL_BYTES_SEC
+VM_RESTRICTED_ATTR=DISK/READ_BYTES_SEC
+VM_RESTRICTED_ATTR=DISK/WRITE_BYTES_SEC
+VM_RESTRICTED_ATTR=DISK/TOTAL_IOPS_SEC
+VM_RESTRICTED_ATTR=DISK/READ_IOPS_SEC
+VM_RESTRICTED_ATTR=DISK/WRITE_IOPS_SEC
+VM_RESTRICTED_ATTR=DISK/ORIGINAL_SIZE
+VM_RESTRICTED_ATTR=CPU_COST
+VM_RESTRICTED_ATTR=MEMORY_COST
+VM_RESTRICTED_ATTR=DISK_COST
+VM_RESTRICTED_ATTR=PCI
+VM_RESTRICTED_ATTR=EMULATOR
+VM_RESTRICTED_ATTR=USER_INPUTS/CPU
+VM_RESTRICTED_ATTR=USER_INPUTS/MEMORY
+VM_RESTRICTED_ATTR=USER_INPUTS/VCPU
+VM_SUBMIT_ON_HOLD=NO
+VNC_PORTS=START=5900
+VNET_RESTRICTED_ATTR=VN_MAD
+VNET_RESTRICTED_ATTR=PHYDEV
+VNET_RESTRICTED_ATTR=VLAN_ID
+VNET_RESTRICTED_ATTR=BRIDGE
+VNET_RESTRICTED_ATTR=AR/VN_MAD
+VNET_RESTRICTED_ATTR=AR/PHYDEV
+VNET_RESTRICTED_ATTR=AR/VLAN_ID
+VNET_RESTRICTED_ATTR=AR/BRIDGE
+VXLAN_IDS=START=2
+----------------------------------------
+Wed Feb 15 23:55:33 2017[Z0][ONE][I][ERF3]: Log level:3 [0=ERROR,1=WARNING,2=INFO,3=DEBUG]
+Wed Feb 15 23:55:33 2017[Z0][ONE][I][ERF3]: Support for xmlrpc-c > 1.31: yes
+Wed Feb 15 23:55:33 2017[Z0][ONE][I][ERF3]: Checking database version.
+Wed Feb 15 23:55:33 2017[Z0][ONE][I][ERF3]: oned is using version 4.90.0 for local_db_versioning
+Wed Feb 15 23:55:33 2017[Z0][ONE][I][ERF3]: oned is using version 5.2.0 for db_versioning
+Wed Feb 15 23:55:33 2017[Z0][ACL][I][ERF3]: Starting ACL Manager...
+Wed Feb 15 23:55:33 2017[Z0][ACL][I][ERF3]: ACL Manager started.
+Wed Feb 15 23:55:33 2017[Z0][VMM][I][ERF3]: Starting Virtual Machine Manager...
+Wed Feb 15 23:55:33 2017[Z0][VMM][I][ERF3]: Virtual Machine Manager started.
+Wed Feb 15 23:55:33 2017[Z0][LCM][I][ERF3]: Starting Life-cycle Manager...
+Wed Feb 15 23:55:33 2017[Z0][LCM][I][ERF3]: Life-cycle Manager started.
+Wed Feb 15 23:55:33 2017[Z0][InM][I][ERF3]: Starting Information Manager...
+Wed Feb 15 23:55:33 2017[Z0][InM][I][ERF3]: Information Manager started.
+Wed Feb 15 23:55:33 2017[Z0][TrM][I][ERF3]: Starting Transfer Manager...
+Wed Feb 15 23:55:33 2017[Z0][DiM][I][ERF3]: Starting Dispatch Manager...
+Wed Feb 15 23:55:33 2017[Z0][TrM][I][ERF3]: Transfer Manager started.
+Wed Feb 15 23:55:33 2017[Z0][DiM][I][ERF3]: Dispatch Manager started.
+Wed Feb 15 23:55:33 2017[Z0][HKM][I][ERF3]: Starting Hook Manager...
+Wed Feb 15 23:55:33 2017[Z0][AuM][I][ERF3]: Starting Auth Manager...
+Wed Feb 15 23:55:33 2017[Z0][ImM][I][ERF3]: Starting Image Manager...
+Wed Feb 15 23:55:33 2017[Z0][ImM][I][ERF3]: Starting Marketplace Manager...
+Wed Feb 15 23:55:33 2017[Z0][IPM][I][ERF3]: Starting IPAM Manager...
+Wed Feb 15 23:55:33 2017[Z0][HKM][I][ERF3]: Hook Manager started.
+Wed Feb 15 23:55:33 2017[Z0][ImM][I][ERF3]: Image Manager started.
+Wed Feb 15 23:55:33 2017[Z0][AuM][I][ERF3]: Authorization Manager started.
+Wed Feb 15 23:55:33 2017[Z0][MKP][I][ERF3]: Marketplace Manager started.
+Wed Feb 15 23:55:33 2017[Z0][IPM][I][ERF3]: IPAM Manager started.
+Wed Feb 15 23:55:34 2017[Z0][VMM][I][ERF3]: Loading Virtual Machine Manager drivers.
+Wed Feb 15 23:55:34 2017[Z0][VMM][I][ERF3]: 	Loading driver: kvm (KVM)
+Wed Feb 15 23:55:35 2017[Z0][VMM][I][ERF3]: 	Driver kvm loaded.
+Wed Feb 15 23:55:35 2017[Z0][InM][I][ERF3]: Loading Information Manager drivers.
+Wed Feb 15 23:55:35 2017[Z0][InM][I][ERF3]: 	Loading driver: collectd
+Wed Feb 15 23:55:35 2017[Z0][InM][I][ERF3]: 	Driver collectd loaded
+Wed Feb 15 23:55:35 2017[Z0][InM][I][ERF3]: 	Loading driver: kvm
+Wed Feb 15 23:55:35 2017[Z0][InM][I][ERF3]: 	Driver kvm loaded
+Wed Feb 15 23:55:35 2017[Z0][TM][I][ERF3]: Loading Transfer Manager driver.
+Wed Feb 15 23:55:35 2017[Z0][TM][I][ERF3]: 	Transfer manager driver loaded
+Wed Feb 15 23:55:35 2017[Z0][HKM][I][ERF3]: Loading Hook Manager driver.
+Wed Feb 15 23:55:35 2017[Z0][HKM][I][ERF3]: 	Hook Manager loaded
+Wed Feb 15 23:55:35 2017[Z0][ImM][I][ERF3]: Loading Image Manager driver.
+Wed Feb 15 23:55:35 2017[Z0][ImM][I][ERF3]: 	Image Manager loaded
+Wed Feb 15 23:55:35 2017[Z0][MKP][I][ERF3]: Loading Marketplace Manager driver.
+Wed Feb 15 23:55:36 2017[Z0][MKP][I][ERF3]: 	Marketplace Manager loaded
+Wed Feb 15 23:55:36 2017[Z0][IPM][I][ERF3]: Loading IPAM Manager driver.
+Wed Feb 15 23:55:36 2017[Z0][IPM][I][ERF3]: 	IPAM Manager loaded
+Wed Feb 15 23:55:36 2017[Z0][AuM][I][ERF3]: Loading Auth. Manager driver.
+Wed Feb 15 23:55:36 2017[Z0][AuM][I][ERF3]: 	Auth Manager loaded
+Wed Feb 15 23:55:36 2017[Z0][ReM][I][ERF3]: Starting Request Manager...
+Wed Feb 15 23:55:36 2017[Z0][ReM][I][ERF3]: Starting XML-RPC server, port 2633 ...
+Wed Feb 15 23:55:36 2017[Z0][ReM][I][ERF3]: Request Manager started.
+Wed Feb 15 23:55:37 2017[Z0][ReM][D][ERF3]: Req:9280 UID:0 SystemConfig invoked 
+Wed Feb 15 23:55:37 2017[Z0][ReM][D][ERF3]: Req:9280 UID:0 SystemConfig result SUCCESS, "<TEMPLATE><AUTH_MAD>..."
+Wed Feb 15 23:55:48 2017[Z0][MKP][D][ERF3]: Monitoring marketplace OpenNebula Public (0)
+Wed Feb 15 23:55:48 2017[Z0][InM][D][ERF3]: Monitoring datastore default (1)
+Wed Feb 15 23:55:48 2017[Z0][InM][D][ERF3]: Monitoring datastore files (2)
+Wed Feb 15 23:55:48 2017[Z0][ImM][D][ERF3]: Datastore default (1) successfully monitored.
+Wed Feb 15 23:55:48 2017[Z0][ImM][D][ERF3]: Datastore files (2) successfully monitored.
+Wed Feb 15 23:55:49 2017[Z0][MKP][D][ERF3]: Marketplace OpenNebula Public (0) successfully monitored.
+Wed Feb 15 23:55:50 2017[Z0][InM][D][ERF3]: Host master (0) successfully monitored.
+Wed Feb 15 23:56:03 2017[Z0][ReM][D][ERF3]: Req:960 UID:0 UserInfo invoked , -1
+Wed Feb 15 23:56:03 2017[Z0][ReM][D][ERF3]: Req:960 UID:0 UserInfo result SUCCESS, "<USER><ID>0</ID><GID..."
+Wed Feb 15 23:56:03 2017[Z0][AuM][D][ERF3]: Message received: AUTHENTICATE SUCCESS 0 -
+
+Wed Feb 15 23:56:03 2017[Z0][ReM][D][ERF3]: Req:960 UID:0 UserInfo invoked , -1
+Wed Feb 15 23:56:03 2017[Z0][ReM][D][ERF3]: Req:960 UID:0 UserInfo result SUCCESS, "<USER><ID>0</ID><GID..."
+Wed Feb 15 23:56:03 2017[Z0][ReM][D][ERF3]: Req:3184 UID:0 GroupInfo invoked , 0
+Wed Feb 15 23:56:03 2017[Z0][ReM][D][ERF3]: Req:3184 UID:0 GroupInfo result SUCCESS, "<GROUP><ID>0</ID><NA..."
+Wed Feb 15 23:56:03 2017[Z0][ReM][D][ERF3]: Req:960 UID:0 UserInfo invoked , -1
+Wed Feb 15 23:56:03 2017[Z0][ReM][D][ERF3]: Req:960 UID:0 UserInfo result SUCCESS, "<USER><ID>0</ID><GID..."
+Wed Feb 15 23:56:03 2017[Z0][ReM][D][ERF3]: Req:3184 UID:0 GroupInfo invoked , 0
+Wed Feb 15 23:56:03 2017[Z0][ReM][D][ERF3]: Req:3184 UID:0 GroupInfo result SUCCESS, "<GROUP><ID>0</ID><NA..."
+Wed Feb 15 23:56:03 2017[Z0][AuM][D][ERF3]: Message received: AUTHENTICATE SUCCESS 1 -
+
+Wed Feb 15 23:56:03 2017[Z0][ReM][D][ERF3]: Req:9920 UID:1 SystemConfig invoked 
+Wed Feb 15 23:56:03 2017[Z0][ReM][D][ERF3]: Req:9920 UID:1 SystemConfig result SUCCESS, "<TEMPLATE><AUTH_MAD>..."
+Wed Feb 15 23:56:03 2017[Z0][ReM][D][ERF3]: Req:6944 UID:0 ZoneInfo invoked , 0
+Wed Feb 15 23:56:03 2017[Z0][ReM][D][ERF3]: Req:6944 UID:0 ZoneInfo result SUCCESS, "<ZONE><ID>0</ID><NAM..."
+Wed Feb 15 23:56:04 2017[Z0][ReM][D][ERF3]: Req:4960 UID:1 SystemConfig invoked 
+Wed Feb 15 23:56:04 2017[Z0][ReM][D][ERF3]: Req:4960 UID:1 SystemConfig result SUCCESS, "<TEMPLATE><AUTH_MAD>..."
+Wed Feb 15 23:56:04 2017[Z0][ReM][D][ERF3]: Req:480 UID:0 UserInfo invoked , -1
+Wed Feb 15 23:56:04 2017[Z0][ReM][D][ERF3]: Req:480 UID:0 UserInfo result SUCCESS, "<USER><ID>0</ID><GID..."
+Wed Feb 15 23:56:04 2017[Z0][ReM][D][ERF3]: Req:8592 UID:0 GroupInfo invoked , 0
+Wed Feb 15 23:56:04 2017[Z0][ReM][D][ERF3]: Req:8592 UID:0 GroupInfo result SUCCESS, "<GROUP><ID>0</ID><NA..."
+Wed Feb 15 23:56:04 2017[Z0][ReM][D][ERF3]: Req:480 UID:0 UserInfo invoked , -1
+Wed Feb 15 23:56:04 2017[Z0][ReM][D][ERF3]: Req:480 UID:0 UserInfo result SUCCESS, "<USER><ID>0</ID><GID..."
+Wed Feb 15 23:56:04 2017[Z0][ReM][D][ERF3]: Req:8592 UID:0 GroupInfo invoked , 0
+Wed Feb 15 23:56:04 2017[Z0][ReM][D][ERF3]: Req:8592 UID:0 GroupInfo result SUCCESS, "<GROUP><ID>0</ID><NA..."
+Wed Feb 15 23:56:06 2017[Z0][ReM][D][ERF3]: Req:1968 UID:0 VirtualMachinePoolInfo invoked , -2, -1, -1, -1
+Wed Feb 15 23:56:07 2017[Z0][ReM][D][ERF3]: Req:1968 UID:0 VirtualMachinePoolInfo result SUCCESS, "<VM_POOL></VM_POOL>"
+Wed Feb 15 23:56:07 2017[Z0][ReM][D][ERF3]: Req:3232 UID:0 VirtualMachinePoolInfo invoked , -2, -1, -1, -1
+Wed Feb 15 23:56:07 2017[Z0][ReM][D][ERF3]: Req:3232 UID:0 VirtualMachinePoolInfo result SUCCESS, "<VM_POOL></VM_POOL>"
+Wed Feb 15 23:56:07 2017[Z0][AuM][D][ERF3]: Message received: AUTHENTICATE SUCCESS 2 -
+
+Wed Feb 15 23:56:07 2017[Z0][ReM][D][ERF3]: Req:9696 UID:0 DatastorePoolInfo invoked 
+Wed Feb 15 23:56:07 2017[Z0][ReM][D][ERF3]: Req:9696 UID:0 DatastorePoolInfo result SUCCESS, "<DATASTORE_POOL><DAT..."
+Wed Feb 15 23:56:08 2017[Z0][ReM][D][ERF3]: Req:4880 UID:0 ImagePoolInfo invoked , -2, 0, -2000, -1
+Wed Feb 15 23:56:08 2017[Z0][ReM][D][ERF3]: Req:4880 UID:0 ImagePoolInfo result SUCCESS, "<IMAGE_POOL></IMAGE_..."
+Wed Feb 15 23:56:08 2017[Z0][ReM][D][ERF3]: Req:8880 UID:0 VirtualNetworkPoolInfo invoked , -2, -1, -1
+Wed Feb 15 23:56:08 2017[Z0][ReM][D][ERF3]: Req:8880 UID:0 VirtualNetworkPoolInfo result SUCCESS, "<VNET_POOL></VNET_PO..."
+Wed Feb 15 23:56:08 2017[Z0][ReM][D][ERF3]: Req:7040 UID:0 VirtualMachinePoolInfo invoked , -2, 0, -2000, -1
+Wed Feb 15 23:56:08 2017[Z0][ReM][D][ERF3]: Req:7040 UID:0 VirtualMachinePoolInfo result SUCCESS, "<VM_POOL></VM_POOL>"
+Wed Feb 15 23:56:08 2017[Z0][ReM][D][ERF3]: Req:8400 UID:0 HostPoolInfo invoked 
+Wed Feb 15 23:56:08 2017[Z0][ReM][D][ERF3]: Req:9440 UID:0 VirtualMachinePoolAccounting invoked , -2, 1486598168, -1
+Wed Feb 15 23:56:08 2017[Z0][ReM][D][ERF3]: Req:8400 UID:0 HostPoolInfo result SUCCESS, "<HOST_POOL><HOST><ID..."
+Wed Feb 15 23:56:08 2017[Z0][ReM][D][ERF3]: Req:9520 UID:0 UserPoolInfo invoked 
+Wed Feb 15 23:56:08 2017[Z0][ReM][D][ERF3]: Req:9200 UID:0 GroupPoolInfo invoked 
+Wed Feb 15 23:56:08 2017[Z0][ReM][D][ERF3]: Req:9440 UID:0 VirtualMachinePoolAccounting result SUCCESS, "<HISTORY_RECORDS></H..."
+Wed Feb 15 23:56:08 2017[Z0][ReM][D][ERF3]: Req:9520 UID:0 UserPoolInfo result SUCCESS, "<USER_POOL><USER><ID..."
+Wed Feb 15 23:56:08 2017[Z0][ReM][D][ERF3]: Req:9200 UID:0 GroupPoolInfo result SUCCESS, "<GROUP_POOL><GROUP><..."
+Wed Feb 15 23:56:08 2017[Z0][ReM][D][ERF3]: Req:9440 UID:0 VirtualMachinePoolAccounting invoked , -2, 1486598168, -1
+Wed Feb 15 23:56:08 2017[Z0][ReM][D][ERF3]: Req:9440 UID:0 VirtualMachinePoolAccounting result SUCCESS, "<HISTORY_RECORDS></H..."
+Wed Feb 15 23:56:10 2017[Z0][InM][D][ERF3]: Host master (0) successfully monitored.
+Wed Feb 15 23:56:23 2017[Z0][ReM][D][ERF3]: Req:9120 UID:0 VirtualMachinePoolInfo invoked , -2, 0, -2000, -1
+Wed Feb 15 23:56:23 2017[Z0][ReM][D][ERF3]: Req:9120 UID:0 VirtualMachinePoolInfo result SUCCESS, "<VM_POOL></VM_POOL>"
+Wed Feb 15 23:56:23 2017[Z0][ReM][D][ERF3]: Req:880 UID:0 TemplatePoolInfo invoked , -2, -1, -1
+Wed Feb 15 23:56:23 2017[Z0][ReM][D][ERF3]: Req:880 UID:0 TemplatePoolInfo result SUCCESS, "<VMTEMPLATE_POOL></V..."
+Wed Feb 15 23:56:30 2017[Z0][InM][D][ERF3]: Host master (0) successfully monitored.
+Wed Feb 15 23:56:36 2017[Z0][ReM][D][ERF3]: Req:7936 UID:0 VirtualMachinePoolInfo invoked , -2, -1, -1, -1
+Wed Feb 15 23:56:37 2017[Z0][ReM][D][ERF3]: Req:7936 UID:0 VirtualMachinePoolInfo result SUCCESS, "<VM_POOL></VM_POOL>"
+Wed Feb 15 23:56:37 2017[Z0][ReM][D][ERF3]: Req:7040 UID:0 VirtualMachinePoolInfo invoked , -2, -1, -1, -1
+Wed Feb 15 23:56:37 2017[Z0][ReM][D][ERF3]: Req:7040 UID:0 VirtualMachinePoolInfo result SUCCESS, "<VM_POOL></VM_POOL>"
+Wed Feb 15 23:56:44 2017[Z0][MKP][D][ERF3]: Monitoring marketplace OpenNebula Public (0)
+Wed Feb 15 23:56:44 2017[Z0][InM][D][ERF3]: Monitoring datastore default (1)
+Wed Feb 15 23:56:44 2017[Z0][InM][D][ERF3]: Monitoring datastore files (2)
+Wed Feb 15 23:56:45 2017[Z0][ImM][D][ERF3]: Datastore files (2) successfully monitored.
+Wed Feb 15 23:56:45 2017[Z0][ImM][D][ERF3]: Datastore default (1) successfully monitored.
+Wed Feb 15 23:56:45 2017[Z0][MKP][D][ERF3]: Marketplace OpenNebula Public (0) successfully monitored.
+Wed Feb 15 23:56:50 2017[Z0][InM][D][ERF3]: Host master (0) successfully monitored.
+Wed Feb 15 23:57:06 2017[Z0][ReM][D][ERF3]: Req:1120 UID:0 VirtualMachinePoolInfo invoked , -2, -1, -1, -1
+Wed Feb 15 23:57:06 2017[Z0][ReM][D][ERF3]: Req:1120 UID:0 VirtualMachinePoolInfo result SUCCESS, "<VM_POOL></VM_POOL>"
+Wed Feb 15 23:57:07 2017[Z0][ReM][D][ERF3]: Req:4928 UID:0 VirtualMachinePoolInfo invoked , -2, -1, -1, -1
+Wed Feb 15 23:57:07 2017[Z0][ReM][D][ERF3]: Req:4928 UID:0 VirtualMachinePoolInfo result SUCCESS, "<VM_POOL></VM_POOL>"
+Wed Feb 15 23:57:10 2017[Z0][InM][D][ERF3]: Host master (0) successfully monitored.
+Wed Feb 15 23:57:30 2017[Z0][InM][D][ERF3]: Host master (0) successfully monitored.
+Wed Feb 15 23:57:36 2017[Z0][ReM][D][ERF3]: Req:7568 UID:0 VirtualMachinePoolInfo invoked , -2, -1, -1, -1
+Wed Feb 15 23:57:37 2017[Z0][ReM][D][ERF3]: Req:7568 UID:0 VirtualMachinePoolInfo result SUCCESS, "<VM_POOL></VM_POOL>"
+Wed Feb 15 23:57:37 2017[Z0][ReM][D][ERF3]: Req:7856 UID:0 VirtualMachinePoolInfo invoked , -2, -1, -1, -1
+Wed Feb 15 23:57:37 2017[Z0][ReM][D][ERF3]: Req:7856 UID:0 VirtualMachinePoolInfo result SUCCESS, "<VM_POOL></VM_POOL>"
+Wed Feb 15 23:57:41 2017[Z0][MKP][D][ERF3]: Monitoring marketplace OpenNebula Public (0)
+Wed Feb 15 23:57:42 2017[Z0][InM][D][ERF3]: Monitoring datastore default (1)
+Wed Feb 15 23:57:42 2017[Z0][InM][D][ERF3]: Monitoring datastore files (2)
+Wed Feb 15 23:57:42 2017[Z0][ImM][D][ERF3]: Datastore default (1) successfully monitored.
+Wed Feb 15 23:57:42 2017[Z0][ImM][D][ERF3]: Datastore files (2) successfully monitored.
+Wed Feb 15 23:57:42 2017[Z0][MKP][D][ERF3]: Marketplace OpenNebula Public (0) successfully monitored.
+Wed Feb 15 23:57:50 2017[Z0][InM][D][ERF3]: Host master (0) successfully monitored.
+Wed Feb 15 23:58:06 2017[Z0][ReM][D][ERF3]: Req:3600 UID:0 VirtualMachinePoolInfo invoked , -2, -1, -1, -1
+Wed Feb 15 23:58:07 2017[Z0][ReM][D][ERF3]: Req:3600 UID:0 VirtualMachinePoolInfo result SUCCESS, "<VM_POOL></VM_POOL>"
+Wed Feb 15 23:58:07 2017[Z0][ReM][D][ERF3]: Req:4352 UID:0 VirtualMachinePoolInfo invoked , -2, -1, -1, -1
+Wed Feb 15 23:58:07 2017[Z0][ReM][D][ERF3]: Req:4352 UID:0 VirtualMachinePoolInfo result SUCCESS, "<VM_POOL></VM_POOL>"
+Wed Feb 15 23:58:10 2017[Z0][InM][D][ERF3]: Host master (0) successfully monitored.
+Wed Feb 15 23:58:30 2017[Z0][InM][D][ERF3]: Host master (0) successfully monitored.
+Wed Feb 15 23:58:36 2017[Z0][ReM][D][ERF3]: Req:7312 UID:0 VirtualMachinePoolInfo invoked , -2, -1, -1, -1
+Wed Feb 15 23:58:36 2017[Z0][ReM][D][ERF3]: Req:7312 UID:0 VirtualMachinePoolInfo result SUCCESS, "<VM_POOL></VM_POOL>"
+Wed Feb 15 23:58:36 2017[Z0][ReM][D][ERF3]: Req:7312 UID:0 VirtualMachinePoolInfo invoked , -2, -1, -1, -1
+Wed Feb 15 23:58:37 2017[Z0][ReM][D][ERF3]: Req:7312 UID:0 VirtualMachinePoolInfo result SUCCESS, "<VM_POOL></VM_POOL>"
+Wed Feb 15 23:58:38 2017[Z0][MKP][D][ERF3]: Monitoring marketplace OpenNebula Public (0)
+Wed Feb 15 23:58:38 2017[Z0][InM][D][ERF3]: Monitoring datastore default (1)
+Wed Feb 15 23:58:38 2017[Z0][InM][D][ERF3]: Monitoring datastore files (2)
+Wed Feb 15 23:58:39 2017[Z0][ImM][D][ERF3]: Datastore files (2) successfully monitored.
+Wed Feb 15 23:58:39 2017[Z0][ImM][D][ERF3]: Datastore default (1) successfully monitored.
+Wed Feb 15 23:58:39 2017[Z0][MKP][D][ERF3]: Marketplace OpenNebula Public (0) successfully monitored.
+Wed Feb 15 23:58:50 2017[Z0][InM][D][ERF3]: Host master (0) successfully monitored.
+Wed Feb 15 23:59:06 2017[Z0][ReM][D][ERF3]: Req:3680 UID:0 VirtualMachinePoolInfo invoked , -2, -1, -1, -1
+Wed Feb 15 23:59:06 2017[Z0][ReM][D][ERF3]: Req:3680 UID:0 VirtualMachinePoolInfo result SUCCESS, "<VM_POOL></VM_POOL>"
+Wed Feb 15 23:59:06 2017[Z0][ReM][D][ERF3]: Req:3680 UID:0 VirtualMachinePoolInfo invoked , -2, -1, -1, -1
+Wed Feb 15 23:59:07 2017[Z0][ReM][D][ERF3]: Req:3680 UID:0 VirtualMachinePoolInfo result SUCCESS, "<VM_POOL></VM_POOL>"
+Wed Feb 15 23:59:10 2017[Z0][InM][D][ERF3]: Host master (0) successfully monitored.
+Wed Feb 15 23:59:30 2017[Z0][InM][D][ERF3]: Host master (0) successfully monitored.
+Wed Feb 15 23:59:35 2017[Z0][MKP][D][ERF3]: Monitoring marketplace OpenNebula Public (0)
+Wed Feb 15 23:59:35 2017[Z0][InM][D][ERF3]: Monitoring datastore default (1)
+Wed Feb 15 23:59:36 2017[Z0][InM][D][ERF3]: Monitoring datastore files (2)
+Wed Feb 15 23:59:36 2017[Z0][ImM][D][ERF3]: Datastore default (1) successfully monitored.
+Wed Feb 15 23:59:36 2017[Z0][ImM][D][ERF3]: Datastore files (2) successfully monitored.
+Wed Feb 15 23:59:36 2017[Z0][ReM][D][ERF3]: Req:4096 UID:0 VirtualMachinePoolInfo invoked , -2, -1, -1, -1
+Wed Feb 15 23:59:37 2017[Z0][ReM][D][ERF3]: Req:4096 UID:0 VirtualMachinePoolInfo result SUCCESS, "<VM_POOL></VM_POOL>"
+Wed Feb 15 23:59:37 2017[Z0][ReM][D][ERF3]: Req:4816 UID:0 VirtualMachinePoolInfo invoked , -2, -1, -1, -1
+Wed Feb 15 23:59:37 2017[Z0][ReM][D][ERF3]: Req:4816 UID:0 VirtualMachinePoolInfo result SUCCESS, "<VM_POOL></VM_POOL>"
+Wed Feb 15 23:59:37 2017[Z0][MKP][D][ERF3]: Marketplace OpenNebula Public (0) successfully monitored.
+Wed Feb 15 23:59:50 2017[Z0][InM][D][ERF3]: Host master (0) successfully monitored.

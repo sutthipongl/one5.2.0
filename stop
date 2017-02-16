@@ -1,2 +1,3 @@
 service opennebula stop
 service opennebula-sunstone stop
+service ers stop

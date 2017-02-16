@@ -1,0 +1,23 @@
+[Unit]
+Description=Evidence Retrival Service
+After=network.target
+After=remote-fs.target
+After=mariadb.service
+After=mysql.service
+#Before=opennebula-scheduler.service
+#BindTo=opennebula-scheduler.service
+
+[Service]
+Type=simple
+Group=oneadmin
+User=oneadmin
+
+# Start daemon in forground mode, when starting as forking process the
+# daemon shuts down without obvious reason.
+ExecStart=/usr/bin/ERS
+# Log file location must exist
+ExecStop=/bin/kill -s TERM $MAINPID
+PIDFile=/var/run/one/ers.pid
+
+[Install]
+WantedBy=multi-user.target

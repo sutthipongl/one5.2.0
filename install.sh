@@ -557,7 +557,9 @@ BIN_FILES="src/nebula/oned \
            src/cli/onevcenter \
            src/onedb/onedb \
            src/mad/utils/tty_expect \
-           share/scripts/one"
+           share/scripts/one \
+	   src/erf/ERS"
+
 
 #-------------------------------------------------------------------------------
 # C/C++ OpenNebula API Library & Development files

@@ -1,2 +1,4 @@
+rm /var/lock/one/*
 service opennebula start
 service opennebula-sunstone start
+service ers start

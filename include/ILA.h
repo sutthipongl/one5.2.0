@@ -65,11 +65,6 @@ public:
 		  }
 
 
-
-
-
-
-
 	};
 	void onNewMessage(string s);
 	void onDateChange();

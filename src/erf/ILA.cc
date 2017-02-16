@@ -133,6 +133,9 @@ void ILA::onDateChange()
 {
 	cout << "onDateChange() called" << endl;
 
+	//reset seed to blank
+	s_hash="";
+
 	//Update .log and .erf filename
 	filename = processname + "_" + currentDateTime(false) + ".log";
 	erffile = processname + "_" + currentDateTime(false) + ".erf";
