@@ -5,6 +5,7 @@
 - Start script : /home/oneadmin/one5.2.0/start
 - ReStart script : /home/oneadmin/one5.2.0/restart
 - Stop script : /home/oneadmin/one5.2.0/stop
+- Rebuild script : /home/oneadmin/one5.2.0/rebuild
 
 # OpenNebula
 
