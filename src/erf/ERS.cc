@@ -144,7 +144,6 @@ void ERSService::run(){
 
 int main(int argc, char **argv)
 {
-			cout << "ERF : Evidence Recovery Service start v 1.0" << endl;
 			ERSService ers ;
 			ers.registermethod();
 			ers.run();
