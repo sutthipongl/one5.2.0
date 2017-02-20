@@ -11,7 +11,7 @@
 
 # OpenNebula
 
-Original guild
+Original guide
 https://github.com/OpenNebula/one/blob/master/README.md
 
 # ERF installation script in Ubuntu 16.04
