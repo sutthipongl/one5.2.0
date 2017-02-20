@@ -29,12 +29,35 @@ void ILA::onNewMessage(string s)
 		writeERFFile("authening : "+single_line);
 		writeERFFile(s_hash);
 
+		// update DB
+		if(updateDB(s_hash)==0)
+		{
+			cout << "ERF : Error update DB " << s_hash << endl;
+
+			//If previously it connected , but can't connect now ,
+			//If ERF can't connect DB since beginning , mark line
+			if(isDBConnect || isFirstLine)
+			{
+				writeLogFile("========= ERF OFFLINE ===========");
+
+				isDBConnect=false;
+			}
+
+		}else{
+
+			//If previously it disconnected from DB, but can connect now
+			if(!isDBConnect)
+			{
+				writeLogFile("========= ERF ONLINE ============");
+				isDBConnect=true;
+			}
+
+		}
+
 		//write message to file
 		writeLogFile(single_line);
 
-		// update DB
-		if(updateDB(s_hash)==0)
-			cout << "ERF : Error update DB " << s_hash << endl;
+		isFirstLine=false;
 	}
 
 
@@ -85,7 +108,6 @@ int ILA::updateDB(string curr_hash){
 			}
 			else
 			{
-
 				cout << "ERF : error " << err_num << " : " << err_msg << endl;
 			}
 
@@ -135,6 +157,9 @@ void ILA::onDateChange()
 
 	//reset seed to blank
 	s_hash="";
+
+	// reset flag for ERF Mark Line
+	isFirstLine=true;
 
 	//Update .log and .erf filename
 	filename = processname + "_" + currentDateTime(false) + ".log";

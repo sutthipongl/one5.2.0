@@ -4,7 +4,7 @@
 #include <sstream>
 
 #include <unistd.h>
-
+#include <dirent.h>
 
 using namespace std;
 
@@ -52,11 +52,26 @@ private:
 
 };
 
-class ERSManager
+class ERSGetFileListMethod : public xmlrpc_c::method {
+public:
+	ERSGetFileListMethod(){
+
+        this->_signature = "i:ii";
+            // method's result and two arguments are integers
+        this->_help = "ERSGetFileListMethod";
+    }
+    void
+    execute(xmlrpc_c::paramList const& paramList,
+            xmlrpc_c::value *   const  retvalP) ;
+
+};
+
+class ERSService
 {
 public:
 
-	ERSManager(){
+	ERSService(){
+		cout <<  "ERS Version 1.1" << endl;
 
 	db = mysql_init(NULL);
 

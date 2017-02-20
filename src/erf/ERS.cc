@@ -5,6 +5,7 @@
 
 using namespace std;
 
+// Get file
 void ERSLogAcquisitionMethod::execute(xmlrpc_c::paramList const& paramList,
         xmlrpc_c::value *   const  retvalP){
 
@@ -34,7 +35,7 @@ string ERSLogAcquisitionMethod::get_file_contents(const char *filename)
   return "";
 }
 
-
+// Get hash for a file
 void ERSSecretRetrivalMethod::execute(xmlrpc_c::paramList const& paramList,
         xmlrpc_c::value *   const  retvalP){
 
@@ -75,18 +76,46 @@ void ERSSecretRetrivalMethod::execute(xmlrpc_c::paramList const& paramList,
 
 }
 
-void ERSManager::registermethod(){
+// get *.log in /var/log/one
+void ERSGetFileListMethod::execute(xmlrpc_c::paramList const& paramList,
+        xmlrpc_c::value *   const  retvalP){
+
+	cout << "ERS : ERSGetFileListMethod called" << endl;
+    string result="";
+
+	 DIR *dir;
+	 struct dirent *ent;
+	 if ((dir = opendir ("/var/log/one/")) != NULL) {
+
+	   while ((ent = readdir (dir)) != NULL) {
+
+	     result.append(ent->d_name);
+	     result.append("\n");
+	   }
+	   closedir (dir);
+	 } else {
+	   cout << "ERS can't open /var/log/one directory" << endl;
+	 }
+
+
+    *retvalP = xmlrpc_c::value_string(result);
+
+}
+
+void ERSService::registermethod(){
 
 	// Create ERS method object
 	xmlrpc_c::methodPtr ERSLogAcquisitionMethodP(new ERSLogAcquisitionMethod());
 	xmlrpc_c::methodPtr ERSSecretRetrivalMethodP(new ERSSecretRetrivalMethod(getDB()));
+	xmlrpc_c::methodPtr ERSGetFileListMethodP(new ERSGetFileListMethod());
 
 	//Register methods
 	ERSRegistry.addMethod("ERS.logacquire", ERSLogAcquisitionMethodP);
 	ERSRegistry.addMethod("ERS.retrievesecret", ERSSecretRetrivalMethodP);
+	ERSRegistry.addMethod("ERS.listfile", ERSGetFileListMethodP);
 }
 
-void ERSManager::run(){
+void ERSService::run(){
 
 	try{
 
@@ -116,7 +145,7 @@ void ERSManager::run(){
 int main(int argc, char **argv)
 {
 			cout << "ERF : Evidence Recovery Service start v 1.0" << endl;
-			ERSManager ers ;
+			ERSService ers ;
 			ers.registermethod();
 			ers.run();
 

@@ -161,7 +161,7 @@ void ERFFileLog::log(
               temp.append(module);
               temp.append("][");
               temp+=error_names[type];
-              temp.append("][ERF3]: ");
+              temp.append("]: ");
               temp.append(message);
               //temp.append("\n");
              // cout << "sending to ILA : " << temp << endl;

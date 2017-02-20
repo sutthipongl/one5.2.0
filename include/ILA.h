@@ -16,6 +16,8 @@ public:
 	ILA(const string fn):filename(fn){
 
 		s_hash="";
+		isDBConnect = false;
+		isFirstLine=true;
 	    processname = fn.substr(0,fn.length()-4);
 
 		// -----------------------------------------------------------
@@ -32,6 +34,7 @@ public:
 		// -----------------------------------------------------------
 
 		ostringstream oss;
+		cout <<  "ILA Version 1.0" << endl;
 		cout <<  "ERF : MySQL client version:" << mysql_get_client_info() << endl;
 
 		db = mysql_init(NULL);
@@ -54,7 +57,7 @@ public:
 
 		  }else
 		  {
-
+			  isDBConnect=true;
 			  string temp_filename = getNextFileName(processname + "_" + currentDateTime(false));
 
 			  filename = temp_filename + ".log";
@@ -83,6 +86,8 @@ private:
 	string erffile;
 	string s_hash; // current hash
 	MYSQL* db;
+	bool isDBConnect;
+	bool isFirstLine;
 };
 
 

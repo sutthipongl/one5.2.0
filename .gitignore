@@ -13,7 +13,8 @@ src/mad/utils/tty_expect
 src/nebula/.xmlrpc_test/
 src/nebula/oned
 src/erf/ERS
-src/erfclient/temp.erf
+src/erfclient/*.erf
+src/erfclient/*.log
 share/doc/one/html
 
 *.class
