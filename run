@@ -51,8 +51,7 @@ systemctl enable opennebula-econe
 systemctl enable opennebula-gate
 systemctl enable opennebula-novnc
 systemctl enable opennebula-scheduler
-service opennebula restart
-service opennebula-sunstone restart
+systemctl enable ers
 #service opennebula start
 #service opennebula-sunstone start
 #systemctl status opennebula
