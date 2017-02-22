@@ -71,7 +71,7 @@ class ERSService
 public:
 
 	ERSService(){
-		cout <<  "ERS Version 1.1" << endl;
+	cout <<  "ERS Version 1.1" << endl;
 
 	db = mysql_init(NULL);
 
