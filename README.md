@@ -1,6 +1,9 @@
 *last update 23 Feb 2017*
 # Evidence-Ready Framework
-
+# OpenNebula
+Original guide
+https://github.com/OpenNebula/one/blob/master/README.md
+# Path
 - OS username/passwd : oneadmin/oneadmin
 - MySQL username/passwd : oneadmin/oneadmin
 - Start script : /home/oneadmin/one5.2.0/start
@@ -8,15 +11,10 @@
 - Stop script : /home/oneadmin/one5.2.0/stop
 - Rebuild script : /home/oneadmin/one5.2.0/rebuild
 - ERF table truncate : /home/oneadmin/one5.2.0/truncateERFTable.sh
+- ERFClient run script : /home/oneadmin/one5.2.0/erfclientApp/run
 - Sunstone : http://localhost:9869/
 - Sunstone credential : oneadmin/oneadmin
 - Log file path : /var/log/one
-
-# OpenNebula
-
-Original guide
-https://github.com/OpenNebula/one/blob/master/README.md
-
 # Implementation 
 
 This version is slightly different from the design due to 2 reasons
@@ -59,5 +57,16 @@ Currently ERS process and OpenNebula server run in same host.
 Service file
 > ~/one5.2.0/share/pkgs/CentOS7/ers.service
 
+start script already include ERS service. To control ERS process individaully, we can use this command
+
+> service ers stop
+> service ers start
 ### ERF Client application java project
 - ~/one5.2.0/src/erfclient
+
+# DEMO
+1. Start OpenNebula. When we start VM instance, OpenNebula and ERS service should be live automatically. However, we can control via script mentioned in first section.
+2. OpenNebula will generate log file in */var/log/one*. 
+3. To retrive evidence
+3.1 we need to ensure that *ers* service is running
+3.2 run ERFClient and follow the menu
