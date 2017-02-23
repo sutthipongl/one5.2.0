@@ -1,0 +1,2 @@
+truncate  opennebula.ERF;
+commit;
