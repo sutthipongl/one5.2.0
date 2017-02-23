@@ -15,6 +15,7 @@ src/nebula/oned
 src/erf/ERS
 src/erfclient/*.erf
 src/erfclient/*.log
+erfclientApp
 share/doc/one/html
 
 *.class
