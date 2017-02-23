@@ -1,5 +1,5 @@
-*last update 22 Feb 2017*
-# ERF
+*last update 23 Feb 2017*
+# Evidence-Ready Framework
 
 - OS username/passwd : oneadmin/oneadmin
 - MySQL username/passwd : oneadmin/oneadmin
@@ -7,8 +7,10 @@
 - ReStart script : /home/oneadmin/one5.2.0/restart
 - Stop script : /home/oneadmin/one5.2.0/stop
 - Rebuild script : /home/oneadmin/one5.2.0/rebuild
+- ERF table truncate : /home/oneadmin/one5.2.0/truncateERFTable.sh
 - Sunstone : http://localhost:9869/
 - Sunstone credential : oneadmin/oneadmin
+- Log file path : /var/log/one
 
 # OpenNebula
 
