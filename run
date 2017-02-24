@@ -59,6 +59,5 @@ service opennebula-sunstone restart
 #service opennebula start
 #service opennebula-sunstone start
 #systemctl status opennebula
-mysql -u root -p
-CREATE USER 'oneadmin' IDENTIFIED BY 'oneadmin';
-GRANT ALL PRIVILEGES ON *.* TO 'oneadmin';
+mysql -u root -p < initERF.sql;
+#mysql -u oneadmin -p < createERFTable.sql;
