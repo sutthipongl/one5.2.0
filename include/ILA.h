@@ -15,7 +15,7 @@ class ILA
 public:
 	ILA(const string fn):filename(fn){
 
-		s_hash="";
+		s_hash=getInitialSecret();
 		isDBConnect = false;
 		isFirstLine=true;
 	    processname = fn.substr(0,fn.length()-4);
@@ -27,7 +27,8 @@ public:
 //		CREATE TABLE `ERF` (
 //		  `filename` varchar(100) NOT NULL,
 //		  `hash` varchar(65) DEFAULT NULL,
-//		  `lastupdate` datetime DEFAULT NULL,
+//	      `secret` varchar(65) NOT NULL,
+//	      `lastupdate` datetime DEFAULT NULL,
 //		  PRIMARY KEY (`filename`)
 //		) ;
 
@@ -80,6 +81,7 @@ private:
 	void insertNewFileToDB(string fn);
 	const string currentDateTime(bool withtime);
 	string getNextFileName(string fn_withdate);
+	string getInitialSecret();
 
 	string processname;
 	string filename;

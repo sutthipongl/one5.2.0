@@ -141,7 +141,8 @@ void ILA::insertNewFileToDB(string fn)
 {
 		ostringstream oss;
 		oss.str("");
-		oss << "INSERT INTO ERF VALUES(\"" << fn << "\",\"\",\"" << currentDateTime(true) << "\");";
+
+		oss << "INSERT INTO ERF VALUES(\"" << fn << "\",\"\",\"" << s_hash <<"\",\"" << currentDateTime(true) << "\");";
 
 		if (mysql_query(db,oss.str().c_str()))
 		  {
@@ -155,8 +156,8 @@ void ILA::onDateChange()
 {
 	cout << "onDateChange() called" << endl;
 
-	//reset seed to blank
-	s_hash="";
+	//regenerate initial seed
+	s_hash=getInitialSecret();
 
 	// reset flag for ERF Mark Line
 	isFirstLine=true;
@@ -238,4 +239,20 @@ const string ILA::currentDateTime(bool withtime) {
     return buf;
 }
 
+string ILA::getInitialSecret()
+{
+	/* Decleration and initialization of static constant string type variable */
+		static const string charList = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
+		/* srand() initialize random number generator */
+		/* time() for get current time */
+		srand(time(0));
+		string alphanumeric = "";
+
+		for(int i = 0; i < 65; i++) {
+			/* rand() generate random number */
+			alphanumeric += charList [rand() % charList.size()];
+		}
+
+		return alphanumeric ;
+}

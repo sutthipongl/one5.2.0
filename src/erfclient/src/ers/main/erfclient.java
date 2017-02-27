@@ -16,7 +16,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.MessageDigest;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Properties;
+import java.util.TreeSet;
 
 import org.apache.xmlrpc.XmlRpcException;
 import org.apache.xmlrpc.client.XmlRpcClient;
@@ -113,6 +115,7 @@ private void refreshList()
    try {
 	   String result = (String) xmlrpcclient.execute("ERS.listfile", params);
 
+   TreeSet<String> sortedFileList = new TreeSet<String>();
    BufferedWriter bw;
 
 	   try {
@@ -120,20 +123,36 @@ private void refreshList()
 			bw.write(result);		
 			bw.close();
 			
-			int i=1;
+			
 			try (BufferedReader br = new BufferedReader(new FileReader(new File("file.erf")))) {
 			    String line;
 			  
+			    //Put all lines to TreeSet to get it sort
 			    while ((line = br.readLine()) != null) {
 	
 			    	if ( (line.startsWith("oned_") || line.startsWith("sched_")) && line.endsWith(".log") )
 			    	{
-			    		filesCollection.put(String.valueOf(i), line);
-			    		System.out.println(i+":"+line);
-			    		++i;
+			    		
+			    		sortedFileList.add(line);
+			    		
 			    	}
 			    }
 			    
+			    Iterator<String> iterator;
+			    iterator = sortedFileList.iterator();
+			     
+			    int i=1;
+			    
+			    while (iterator.hasNext()){
+			    	
+			    	String logn = iterator.next();
+			    
+			    	filesCollection.put(String.valueOf(i),logn );
+			    	System.out.println(i+":"+logn);
+			    	++i;
+			    }
+			        
+		    
 			    System.out.println("Please use 'e' followed by number you want to retrieve. For example >e 1");
 			} 
 		
@@ -172,17 +191,23 @@ private void getEvidence(String cmd)
 		bw.write(result);		
 		bw.close();
 
-		// Authenticate
+	
+		// Get hash and secret ,then compare
+		String resultfromDB = (String) xmlrpcclient.execute("ERS.retrievesecret", params);
+		String[] temp = resultfromDB.split("\\|");
 		
-		String hashfromfile = authenticate(filename);
-
+		String hashfromDB = temp[0];
+		String secretfromDB = temp[1];
+		
+		System.out.println("result from DB is "+ resultfromDB);
+		System.out.println("DBhash is "+hashfromDB);
+		System.out.println("DBsecret is "+secretfromDB);
+		
+	// Authenticate
+		
+		String hashfromfile = authenticate(filename,secretfromDB);
 		System.out.println("filehash");
 		System.out.println(hashfromfile);
-		// Get secret and compare
-		String hashfromDB = (String) xmlrpcclient.execute("ERS.retrievesecret", params);
-		
-		System.out.println("DBhash");
-		System.out.println(hashfromDB);
 		
 		if(hashfromfile.equals(hashfromDB))
 		{	if(isOnLine )
@@ -199,9 +224,9 @@ private void getEvidence(String cmd)
 	}
 }
 	
- private String authenticate(String filename)
+ private String authenticate(String filename,String init_seed)
 {
-	String seed = "";
+	String seed = init_seed;
 	String result ="";
     isOnLine = true;
 	  

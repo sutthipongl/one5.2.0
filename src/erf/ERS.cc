@@ -47,7 +47,7 @@ void ERSSecretRetrivalMethod::execute(xmlrpc_c::paramList const& paramList,
     paramList.verifyEnd(1);
 
     ostringstream oss;
-   	oss << "SELECT hash from ERF WHERE filename=\"/var/log/one/"<<fn<<"\"";
+   	oss << "SELECT hash,secret from ERF WHERE filename=\"/var/log/one/"<<fn<<"\"";
 
    	if (mysql_query(sdb,oss.str().c_str()))
 	  {
@@ -66,11 +66,15 @@ void ERSSecretRetrivalMethod::execute(xmlrpc_c::paramList const& paramList,
 			  cout << "ERSSecretRetrivalMethod : Can't find secret for " << fn << endl;
 			}
 
-		  string secret = row[0] ;
+		  string hash = row[0] ;
+		  string secret = row[1];
 
-		  cout << secret << endl;
+		  ostringstream returnstr;
+		  returnstr << hash << "|" << secret;
 
-		  *retvalP = xmlrpc_c::value_string(secret);
+		  cout << "ERSSecretRetrivalMethod return : " << hash << "|" << secret << endl;
+
+		  *retvalP = xmlrpc_c::value_string(returnstr.str());
 
 	  }
 
