@@ -244,9 +244,10 @@ string ILA::getInitialSecret()
 	/* Decleration and initialization of static constant string type variable */
 		static const string charList = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-		/* srand() initialize random number generator */
-		/* time() for get current time */
-		srand(time(0));
+		timespec ts;
+		clock_gettime(CLOCK_REALTIME,&ts);
+		srand(ts.tv_nsec);
+
 		string alphanumeric = "";
 
 		for(int i = 0; i < 65; i++) {
