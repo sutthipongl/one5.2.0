@@ -35,7 +35,7 @@ public:
 		// -----------------------------------------------------------
 
 		ostringstream oss;
-		cout <<  "ILA Version 1.0" << endl;
+		cout <<  "ILA Version 1.1" << endl;
 		cout <<  "ERF : MySQL client version:" << mysql_get_client_info() << endl;
 
 		db = mysql_init(NULL);
