@@ -98,7 +98,7 @@ public void run() throws IOException
 			case 'r' : refreshList(); break;
 			case 'e' : getEvidence(cmd); break;
 			case 'q' : System.out.println("Good bye :)"); System.exit(0);
-			
+			case 'h' : help();
 			default  : help();
 		}
 			
@@ -171,7 +171,10 @@ private void refreshList()
 
 private void help()
 {
-	System.out.println("Please press \"r\" to get/refresh file list and use \"e\" followed by choice you want");;
+	System.out.println(" r - to get/refresh file list");
+	System.out.println(" e <CHOICE> - get evidence");
+	System.out.println(" h - help");
+	System.out.println(" q - exit");
 	
 }
 	
