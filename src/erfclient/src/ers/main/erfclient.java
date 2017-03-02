@@ -29,6 +29,10 @@ public class erfclient {
 	final static String ERS_VERSION = "ERS Client version 1.1 build 20 Feb 2017";
 	final static String ERF_ONLINE = "========= ERF ONLINE ============";
 	final static String ERF_OFFLINE = "========= ERF OFFLINE ===========";
+	final public static String ERF_Trust = "Trust";
+	final public static String ERF_UnTrust = "UnTrust";
+	final public static String ERF_PartialTrust = "Patial Trust";
+	
     boolean isOnLine,autoGetFileList;
 	String ersHost ;
 	String ersPort ;
@@ -96,7 +100,7 @@ public void run() throws IOException
 		switch(cmd.charAt(0)) {
 			
 			case 'r' : refreshList(); break;
-			case 'e' : getEvidence(cmd); break;
+			case 'e' : System.out.println(getEvidence(cmd)); break;
 			case 'q' : System.out.println("Good bye :)"); System.exit(0);
 			case 'h' : help();
 			default  : help();
@@ -178,13 +182,17 @@ private void help()
 	
 }
 	
-private void getEvidence(String cmd)
+public String getEvidence(String cmd)
 {
 	if (cmd == null || cmd.length()==0)
-		return;
+		return "";
 	
 	
    	String filename = filesCollection.get(cmd.split(" ")[1]);
+   	
+   	if (filename == null)
+   		filename = cmd.split(" ")[1];
+   	
     try {
     	
     	Object[] params = new Object[]{new String(filename)};
@@ -214,17 +222,19 @@ private void getEvidence(String cmd)
 		
 		if(hashfromfile.equals(hashfromDB))
 		{	if(isOnLine )
-				System.out.println("TRUST");
+				return ERF_Trust;
 			else
-				System.out.println("Partial Trust");
+				return ERF_PartialTrust;
 		}else
-			System.out.println("UNTRUST");
+			;return ERF_UnTrust;
 		
 		
     } catch (XmlRpcException | IOException e) {
 		// TODO Auto-generated catch blockd
 		e.printStackTrace();
 	}
+    
+    return "";
 }
 	
  private String authenticate(String filename,String init_seed)
@@ -309,5 +319,8 @@ private String sha256(String base) {
         }
      
     }
+  
+  
+ 
 
 }
