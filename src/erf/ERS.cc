@@ -43,40 +43,53 @@ void ERSSecretRetrivalMethod::execute(xmlrpc_c::paramList const& paramList,
 
     string const fn(paramList.getString(0));
 
-
     paramList.verifyEnd(1);
 
     ostringstream oss;
    	oss << "SELECT hash,secret from ERF WHERE filename=\"/var/log/one/"<<fn<<"\"";
 
-   	if (mysql_query(sdb,oss.str().c_str()))
-	  {
-			cout << "ERSSecretRetrivalMethod : FAIL running " << oss.str() << endl;
-			cout << mysql_error(sdb) << endl;
+   	if(!ers->isDBConnected())
+   		ers->reconnectDB();
 
-	  }else
-	  {
-		  MYSQL_RES *result = mysql_store_result(sdb);
 
-		  MYSQL_ROW row = mysql_fetch_row(result);
+   	if(ers->isDBConnected())
+   	{
+   		if (mysql_query(ers->getDB(),oss.str().c_str()))
+   			  {
+   					cout << "ERSSecretRetrivalMethod : FAIL running " << oss.str() << endl;
+   					cout << mysql_error(ers->getDB()) << endl;
 
-		  if (row == NULL)
-			{
-			   //Nothing return, This is the first file for that day
-			  cout << "ERSSecretRetrivalMethod : Can't find secret for " << fn << endl;
-			}
+   					//can't connect DB, return empty result
+   					*retvalP = xmlrpc_c::value_string(" | ");
 
-		  string hash = row[0] ;
-		  string secret = row[1];
+   			  }else
+   			  {
+   				  MYSQL_RES *result = mysql_store_result(ers->getDB());
 
-		  ostringstream returnstr;
-		  returnstr << hash << "|" << secret;
+   				  MYSQL_ROW row = mysql_fetch_row(result);
 
-		  cout << "ERSSecretRetrivalMethod return : " << hash << "|" << secret << endl;
+   				  if (row == NULL)
+   					{
+   					   //Nothing return, This is the first file for that day
+   					  cout << "ERSSecretRetrivalMethod : Can't find secret for " << fn << endl;
+   					}
 
-		  *retvalP = xmlrpc_c::value_string(returnstr.str());
+   				  string hash = row[0] ;
+   				  string secret = row[1];
 
-	  }
+   				  ostringstream returnstr;
+   				  returnstr << hash << "|" << secret;
+
+   				  cout << "ERSSecretRetrivalMethod return : " << hash << "|" << secret << endl;
+
+   				  *retvalP = xmlrpc_c::value_string(returnstr.str());
+
+   			  }
+   	}else
+   	{
+   		*retvalP = xmlrpc_c::value_string(" | ");
+   	}
+
 
 }
 
@@ -101,7 +114,6 @@ void ERSGetFileListMethod::execute(xmlrpc_c::paramList const& paramList,
 	   cout << "ERS can't open /var/log/one directory" << endl;
 	 }
 
-
     *retvalP = xmlrpc_c::value_string(result);
 
 }
@@ -110,7 +122,7 @@ void ERSService::registermethod(){
 
 	// Create ERS method object
 	xmlrpc_c::methodPtr ERSLogAcquisitionMethodP(new ERSLogAcquisitionMethod());
-	xmlrpc_c::methodPtr ERSSecretRetrivalMethodP(new ERSSecretRetrivalMethod(getDB()));
+	xmlrpc_c::methodPtr ERSSecretRetrivalMethodP(new ERSSecretRetrivalMethod(this));
 	xmlrpc_c::methodPtr ERSGetFileListMethodP(new ERSGetFileListMethod());
 
 	//Register methods
@@ -119,6 +131,20 @@ void ERSService::registermethod(){
 	ERSRegistry.addMethod("ERS.listfile", ERSGetFileListMethodP);
 }
 
+bool ERSService::reconnectDB()
+{
+	if (mysql_real_connect(db, DBHost.c_str(),"oneadmin","oneadmin", "opennebula",DBPort, NULL, 0)==NULL)
+		  {
+			  cout << "ERSManager : ERS DB Connection error" << endl;
+			  isDBCon = false;
+			  return false;
+		  }else
+		  {
+			  cout << "ERS : DB connected" << endl;
+			  isDBCon = true;
+			  return true;
+		  }
+}
 void ERSService::run(){
 
 	try{

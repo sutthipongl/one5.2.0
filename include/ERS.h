@@ -2,7 +2,7 @@
 #include <stdexcept>
 #include <iostream>
 #include <sstream>
-
+#include <string>
 #include <unistd.h>
 #include <dirent.h>
 
@@ -13,6 +13,56 @@ using namespace std;
 #include <xmlrpc-c/server_abyss.hpp>
 #include "mysql/mysql.h"
 #include <mysql/errmsg.h>
+
+class ERSService
+{
+public:
+
+	string DBHost;
+	int DBPort;
+
+	ERSService(){
+
+		DBHost = "192.168.1.4";
+		DBPort = 3306;
+
+		cout <<  "ERS Version 1.2 Build 4 Mar 2017" << endl;
+
+		db = mysql_init(NULL);
+
+		if (db == NULL)
+		{
+			cout << "ERSManager : can't init mysql " << mysql_error(db) << endl;
+		}else
+		{
+			if (mysql_real_connect(db, DBHost.c_str(),"oneadmin","oneadmin", "opennebula",DBPort, NULL, 0)==NULL)
+				  {
+					  cout << "ERSManager : ERS DB Connection error" << endl;
+
+				  }else
+				  {
+					  cout << "ERS : DB connected" << endl;
+					  isDBCon = true;
+				  }
+		}
+	};
+
+	MYSQL* getDB(){return db;};
+	bool isDBConnected(){return isDBCon;};
+	bool reconnectDB();
+	void registermethod();
+	void run();
+
+
+private:
+
+xmlrpc_c::serverAbyss* ERSServer;
+xmlrpc_c::registry ERSRegistry;
+MYSQL* db;
+bool isDBCon = false;
+
+
+};
 
 class ERSLogAcquisitionMethod : public xmlrpc_c::method {
 public:
@@ -35,7 +85,7 @@ public:
 
 class ERSSecretRetrivalMethod : public xmlrpc_c::method {
 public:
-	ERSSecretRetrivalMethod(MYSQL* localdb): sdb(localdb){
+	ERSSecretRetrivalMethod(ERSService* ersobj): ers(ersobj){
         // signature and help strings are documentation -- the client
         // can query this information with a system.methodSignature and
         // system.methodHelp RPC.
@@ -48,7 +98,8 @@ public:
             xmlrpc_c::value *   const  retvalP) ;
 
 private:
-    MYSQL* sdb;
+    ERSService* ers;
+
 
 };
 
@@ -66,40 +117,4 @@ public:
 
 };
 
-class ERSService
-{
-public:
 
-	ERSService(){
-	cout <<  "ERS Version 1.1" << endl;
-
-	db = mysql_init(NULL);
-
-	  if (db == NULL)
-	  {
-		  cout << "ERSManager : can't init mysql " << mysql_error(db);
-		 // exit(1);
-	  }
-
-	if (mysql_real_connect(db, "localhost","oneadmin","oneadmin", "opennebula",3306, NULL, 0)==NULL)
-	  {
-		  cout << "ERSManager : ERS DB Connection error" << endl;
-		  cout << "ERSManager : Shutting down service" << endl;
-		  exit(0);
-	  }
-
-	};
-
-	MYSQL* getDB(){return db;};
-	void registermethod();
-	void run();
-
-
-private:
-
-xmlrpc_c::serverAbyss* ERSServer;
-xmlrpc_c::registry ERSRegistry;
-MYSQL* db;
-
-
-};
