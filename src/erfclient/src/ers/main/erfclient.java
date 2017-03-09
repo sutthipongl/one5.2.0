@@ -26,7 +26,7 @@ import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
 
 public class erfclient {
 	
-	final static String ERS_VERSION = "ERS Client version 1.1 build 20 Feb 2017";
+	final static String ERS_VERSION = "ERS Client version 1.2 build 4 Mar 2017";
 	final static String ERF_ONLINE = "========= ERF ONLINE ============";
 	final static String ERF_OFFLINE = "========= ERF OFFLINE ===========";
 	final public static String ERF_Trust = "Trust";
@@ -103,10 +103,8 @@ public void run() throws IOException
 			case 'e' : System.out.println(getEvidence(cmd)); break;
 			case 'q' : System.out.println("Good bye :)"); System.exit(0);
 			case 'h' : help();
-			default  : help();
-		}
-			
-
+			default : help();	
+		}		
 	}
 }
 	
@@ -114,63 +112,58 @@ public void run() throws IOException
 private void refreshList()
 {
    filesCollection.clear();
+   TreeSet<String> sortedFileList = new TreeSet<String>();
+   BufferedWriter bw;
+   String result = "";
    
    Object[] params = new Object[]{};
    try {
-	   String result = (String) xmlrpcclient.execute("ERS.listfile", params);
-
-   TreeSet<String> sortedFileList = new TreeSet<String>();
-   BufferedWriter bw;
-
-	   try {
-			bw = new BufferedWriter(new FileWriter("file.erf"));
-			bw.write(result);		
-			bw.close();
-			
-			
-			try (BufferedReader br = new BufferedReader(new FileReader(new File("file.erf")))) {
-			    String line;
-			  
-			    //Put all lines to TreeSet to get it sort
-			    while ((line = br.readLine()) != null) {
-	
-			    	if ( (line.startsWith("oned_") || line.startsWith("sched_")) && line.endsWith(".log") )
-			    	{
-			    		
-			    		sortedFileList.add(line);
-			    		
-			    	}
-			    }
-			    
-			    Iterator<String> iterator;
-			    iterator = sortedFileList.iterator();
-			     
-			    int i=1;
-			    
-			    while (iterator.hasNext()){
-			    	
-			    	String logn = iterator.next();
-			    
-			    	filesCollection.put(String.valueOf(i),logn );
-			    	System.out.println(i+":"+logn);
-			    	++i;
-			    }
-			        
-		    
-			    System.out.println("Please use 'e' followed by number you want to retrieve. For example >e 1");
-			} 
-		
-	   } catch (IOException e) {
-		// TODO Auto-generated catch block
-			e.printStackTrace();
-		   }
+	    result = (String) xmlrpcclient.execute("ERS.listfile", params);
 	   
    } catch (XmlRpcException e) {
-	// TODO Auto-generated catch block
-	e.printStackTrace();
+		// TODO Auto-generated catch block
+		System.out.println("ERS : Can't get file list, please check ERS server process or erfclient configuration");
    }
-   
+
+   try {
+		bw = new BufferedWriter(new FileWriter("file.erf"));
+		bw.write(result);		
+		bw.close();
+		
+		try (BufferedReader br = new BufferedReader(new FileReader(new File("file.erf")))) {
+		    String line;
+		  
+		    //Put all lines to TreeSet to get it sort
+		    while ((line = br.readLine()) != null) {
+
+		    	if ( (line.startsWith("oned_") || line.startsWith("sched_")) && line.endsWith(".log") )
+		    	{  		
+		    		sortedFileList.add(line);	    		
+		    	}
+		    }
+		    
+	    Iterator<String> iterator;
+	    iterator = sortedFileList.iterator();
+	     
+	    int i=1;
+	    
+	    while (iterator.hasNext()){
+	    	
+	    	String logn = iterator.next();
+	    
+	    	filesCollection.put(String.valueOf(i),logn );
+	    	System.out.println(i+":"+logn);
+	    	++i;
+	    }
+	    
+	    if(result.length()>0)
+	    	System.out.println("Please use 'e' followed by number you want to retrieve. For example >e 1");
+		} 
 	
+   } catch (IOException e) {
+	// TODO Auto-generated catch block
+		e.printStackTrace();
+	   }	
 }
 
 private void help()
@@ -196,7 +189,16 @@ public String getEvidence(String cmd)
     try {
     	
     	Object[] params = new Object[]{new String(filename)};
-		String result = (String) xmlrpcclient.execute("ERS.logacquire", params);
+    	
+    	String result ="";
+    	try{
+    		result = (String) xmlrpcclient.execute("ERS.logacquire", params);
+    		
+    	}catch (org.apache.xmlrpc.XmlRpcException e)
+		{
+			System.out.println("ERS : Can't retrieve log file");
+		}
+		 
 		
 		BufferedWriter bw = new BufferedWriter(new FileWriter(filename));
 		bw.write(result);		
@@ -204,7 +206,14 @@ public String getEvidence(String cmd)
 
 	
 		// Get hash and secret ,then compare
-		String resultfromDB = (String) xmlrpcclient.execute("ERS.retrievesecret", params);
+		String resultfromDB = " | ";
+		try{
+			 resultfromDB = (String) xmlrpcclient.execute("ERS.retrievesecret", params);
+		}catch (org.apache.xmlrpc.XmlRpcException e)
+		{
+			System.out.println("ERS : Can't retrieve Secret");
+		}
+		
 		String[] temp = resultfromDB.split("\\|");
 		
 		String hashfromDB = temp[0];
@@ -229,7 +238,7 @@ public String getEvidence(String cmd)
 			;return ERF_UnTrust;
 		
 		
-    } catch (XmlRpcException | IOException e) {
+    } catch (IOException e) {
 		// TODO Auto-generated catch blockd
 		e.printStackTrace();
 	}
@@ -240,7 +249,7 @@ public String getEvidence(String cmd)
  private String authenticate(String filename,String init_seed)
 {
 	String seed = init_seed;
-	String result ="";
+	String result ="OFFLINE";
     isOnLine = true;
 	  
 	try (BufferedReader br = new BufferedReader(new FileReader(new File(filename)))) {
@@ -250,16 +259,16 @@ public String getEvidence(String cmd)
 	       // process the line.
 	    	
 	    	
-	    	//Found ERF Mark LINE , update flag and not calculate hash
+	    	//Found ERF Mark LINE , update flag and calculate hash as usual
 	    	if(line.equals(ERF_OFFLINE))
 	    	{	
 	    		isOnLine=false;
-	    		continue;
+	    		
 	    		
 	    	}else if(line.equals(ERF_ONLINE))
 	    	{	
 	    		isOnLine=true;
-	    		continue;
+	    		
 	    	}
 	    	
 	    	//Always calculate hash if it's not ERF_MARK line
