@@ -1,12 +1,11 @@
 #include "ILA.h"
 #include "NebulaUtil.h"
 
-#include <string>
+#include <string.h>
 #include <iostream>
 #include <fstream>
 #include <sstream>
-
-
+#include <iomanip>
 using namespace std;
 
 
@@ -29,35 +28,86 @@ void ILA::onNewMessage(string s)
 		writeERFFile("authening : "+single_line);
 		writeERFFile(s_hash);
 
-		// update DB
-		if(updateDB(s_hash)==0)
+		if (!isDBConnect)
 		{
-			cout << "ERF : Error update DB " << s_hash << endl;
+			writeERFFile("ERF : Reconnecting DB.......");
+			// Try to re-connect
+			if (mysql_real_connect(db,DBHost.c_str(),"oneadmin","oneadmin", "opennebula",DBPort, NULL, 0))
+					{
+							writeERFFile("ERF : Reconnected.");
 
-			//If previously it connected , but can't connect now ,
-			//If ERF can't connect DB since beginning , mark line
-			if(isDBConnect || isFirstLine)
-			{
-				writeLogFile("========= ERF OFFLINE ===========");
+							// check if it's ERFTEMP file
+							if(filename.find("_ERFTEMP_")!=string::npos)
+							{
+								writeERFFile("ERF : Current log is ERFTEMP file , renaming......");
+								string new_filename = getNextFileName(processname + "_" + currentDateTime(false));
+								string new_filenamelog = new_filename + ".log";
+								string new_filenameerf = new_filename + ".erf";
 
-				isDBConnect=false;
-			}
+								string oldlog = filename;
+								string olderf = erffile;
 
-		}else{
+								int renresult ;
 
-			//If previously it disconnected from DB, but can connect now
-			if(!isDBConnect)
-			{
-				writeLogFile("========= ERF ONLINE ============");
-				isDBConnect=true;
-			}
 
+								renresult = rename(oldlog.c_str(),new_filenamelog.c_str());
+								filename = new_filenamelog;
+
+								// write msg in old ERF file
+								if (renresult == 0)
+									writeERFFile("ERF : Successfully rename " + oldlog + " to " + new_filenamelog );
+								else
+									writeERFFile("ERF : Fail rename " + oldlog + " to " + new_filenamelog );
+
+								renresult = rename(olderf.c_str(),new_filenameerf.c_str());
+								erffile = new_filenameerf;
+								// write msg in new ERF file
+								if (renresult == 0)
+									writeERFFile("ERF : Successfully rename " + olderf + " to " + new_filenameerf );
+								else
+									writeERFFile("ERF : Fail rename " + olderf + " to " + new_filenameerf );
+
+
+								writeERFFile("Current filename "+filename);
+								writeERFFile("Current ERF file "+erffile);
+
+								// Insert new .log file with initseed and current hash
+								insertNewFileToDB(filename);
+
+							}
+					}
+					else
+					{
+						writeERFFile("ERF : Reconnection attempt failed.");
+					}
 		}
+
+
+		if(updateDB(s_hash)==0)
+			{
+					writeERFFile("ERF : Error update DB " + s_hash);
+
+					//If previously it connected , but can't connect now ,
+					if(isDBConnect)
+					{
+						writeLogFile("========= ERF OFFLINE ===========");
+						isDBConnect=false;
+					}
+
+			}else
+			{
+				//If previously it disconnected from DB, but can connect now
+				if(!isDBConnect)
+					{
+						writeLogFile("========= ERF ONLINE ============");
+						isDBConnect=true;
+					}
+			}
 
 		//write message to file
 		writeLogFile(single_line);
 
-		isFirstLine=false;
+
 	}
 
 
@@ -86,34 +136,11 @@ int ILA::updateDB(string curr_hash){
 
 	  if (mysql_query(db,oss.str().c_str()))
 	    {
-	  		cout << "ERF : FAIL execute " << oss.str() << endl;
-
-
-			const char *    err_msg = mysql_error(db);
-			int             err_num = mysql_errno(db);
-
-			if( err_num == CR_SERVER_GONE_ERROR || err_num == CR_SERVER_LOST )
-			{
-				cout << "MySQL connection error " << err_num << " : " << err_msg << endl;
-
-				// Try to re-connect
-				if (mysql_real_connect(db, "localhost","oneadmin","oneadmin", "opennebula",3306, NULL, 0))
-				{
-					cout << "ERF : Reconnected." << endl;
-				}
-				else
-				{
-					cout << "ERF : Reconnection attempt failed." << endl;
-				}
-			}
-			else
-			{
-				cout << "ERF : error " << err_num << " : " << err_msg << endl;
-			}
-
+		  	writeERFFile("ERF : FAIL execute " + oss.str());
 			return 0;
 	    }
 
+	  writeERFFile("Update hash for file " + filename + " successfully" );
 	  return 1;
 
 }
@@ -142,31 +169,50 @@ void ILA::insertNewFileToDB(string fn)
 		ostringstream oss;
 		oss.str("");
 
-		oss << "INSERT INTO ERF VALUES(\"" << fn << "\",\"\",\"" << s_hash <<"\",\"" << currentDateTime(true) << "\");";
+		oss << "INSERT INTO ERF VALUES(\"" << fn << "\",\""<<s_hash<<"\",\"" << initseed <<"\",\"" << currentDateTime(true) << "\");";
 
 		if (mysql_query(db,oss.str().c_str()))
 		  {
-				cout << "ERF : FAIL running " << oss.str() << endl;
-				cout << mysql_error(db) << endl;
+				writeERFFile("ERF : FAIL running " + oss.str());
+				writeERFFile(mysql_error(db));
+				return;
 
 		  }
+
+		writeERFFile("ERF : " +fn + " is inserted to DB");
 }
 
 void ILA::onDateChange()
 {
-	cout << "onDateChange() called" << endl;
+	writeERFFile("onDateChange() called");
 
 	//regenerate initial seed
 	s_hash=getInitialSecret();
 
-	// reset flag for ERF Mark Line
-	isFirstLine=true;
+	if(isDBConnect)
+	{
+		writeERFFile("ERF : DB connection is OK while Date Roll, roll next log..");
+		//Update .log and .erf filename
+		filename = processname + "_" + currentDateTime(false) + ".log";
+		erffile = processname + "_" + currentDateTime(false) + ".erf";
 
-	//Update .log and .erf filename
-	filename = processname + "_" + currentDateTime(false) + ".log";
-	erffile = processname + "_" + currentDateTime(false) + ".erf";
+		insertNewFileToDB(filename);
+	}else
+	{
+		writeERFFile("ERF : DB connection FAIL while Date Roll, create unique ERFTEMP log..");
+		 //Generate unique temp file, we will rename it once DB online
+		unsigned int nanotime = getSystemNanotime();
+		ostringstream temp;
+		temp << nanotime;
 
-	insertNewFileToDB(filename);
+		// Insert timestamp to file
+		filename = processname + "_ERFTEMP_" + temp.str() + ".log";
+		erffile = processname + "_ERFTEMP_" + temp.str() + ".erf";
+
+		//write ERF OFFLINE since the beginning
+		writeLogFile("========= ERF OFFLINE ===========");
+	}
+
 
 
 }
@@ -179,8 +225,8 @@ string ILA::getNextFileName(string fn_withdate)
 
 			if (mysql_query(db,oss.str().c_str()))
 			  {
-					cout << "ERF : FAIL running " << oss.str() << endl;
-					cout << mysql_error(db) << endl;
+					writeERFFile("ERF : FAIL running " + oss.str());
+					writeERFFile(mysql_error(db));
 
 			  }else
 			  {
@@ -191,11 +237,9 @@ string ILA::getNextFileName(string fn_withdate)
 				  if (row == NULL)
 				    {
 				       //Nothing return, This is the first file for that day
-					  cout << "ERF : No file in DB " << fn_withdate << " is the first one for this day" << endl;
+					  writeERFFile("ERF : No file in DB " + fn_withdate + " is the first one for this day" );
 					  return fn_withdate;
 				    }
-
-
 
 				  string latestfilename = row[0] ;
 
@@ -203,21 +247,24 @@ string ILA::getNextFileName(string fn_withdate)
 				  size_t n = count(latestfilename.begin(),latestfilename.end(),'_');
 				  if (n>1)
 				  {
-					  // file format is _YYYYMMDD_X , file next number
-
-					  string num = latestfilename.substr(latestfilename.rfind("_")+1);
+					  // file format is _YYYYMMDD_XXX , find next number
+					  int from = latestfilename.rfind("_")+1;
+					  int to = latestfilename.rfind(".");
+					  string num = latestfilename.substr(from, to - from);
+					  writeERFFile("ERF : Latest file in DB is " + latestfilename);
+					  writeERFFile("ERF : Latest file in DB number is "+num);
 					  int m = atoi(num.c_str())+1;
 
+					  //Patch zero
 					  stringstream ss;
-					  ss << m;
+					  ss << setfill('0') << setw(4) << m;
 
 					  return fn_withdate + "_" + ss.str() ;
 
 
 				  }else
-				  { // file format is _YYYYMMDD
-
-					  return fn_withdate + "_1";
+				  { 	// file format is _YYYYMMDD
+					  return fn_withdate + "_0001";
 				  }
 			  }
 
@@ -243,10 +290,7 @@ string ILA::getInitialSecret()
 {
 	/* Decleration and initialization of static constant string type variable */
 		static const string charList = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
-		timespec ts;
-		clock_gettime(CLOCK_REALTIME,&ts);
-		srand(ts.tv_nsec);
+		srand(getSystemNanotime());
 
 		string alphanumeric = "";
 
@@ -256,4 +300,13 @@ string ILA::getInitialSecret()
 		}
 
 		return alphanumeric ;
+}
+
+
+unsigned int ILA::getSystemNanotime()
+{
+	timespec ts;
+	clock_gettime(CLOCK_REALTIME,&ts);
+	return ts.tv_nsec;
+
 }

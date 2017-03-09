@@ -16,9 +16,12 @@ public:
 	ILA(const string fn):filename(fn){
 
 		s_hash=getInitialSecret();
+		initseed = s_hash;
 		isDBConnect = false;
-		isFirstLine=true;
 	    processname = fn.substr(0,fn.length()-4);
+
+	    DBHost = "192.168.1.4";
+	    DBPort = 3306;
 
 		// -----------------------------------------------------------
 		// MYSQL Database
@@ -35,26 +38,32 @@ public:
 		// -----------------------------------------------------------
 
 		ostringstream oss;
-		cout <<  "ILA Version 1.1" << endl;
+		cout <<  "ILA Version 1.2" << endl;
 		cout <<  "ERF : MySQL client version:" << mysql_get_client_info() << endl;
 
 		db = mysql_init(NULL);
 
 		  if (db == NULL)
 		  {
-		      cout << "ERF : can't init mysql " << mysql_error(db);
+		      cout << "ERF : can't init mysql " << mysql_error(db) << endl;
 		     // exit(1);
 		  }
 
-		if (mysql_real_connect(db, "localhost","oneadmin","oneadmin", "opennebula",3306, NULL, 0)==NULL)
+		if (mysql_real_connect(db, DBHost.c_str(),"oneadmin","oneadmin", "opennebula",DBPort, NULL, 0)==NULL)
 		  {
 			  cout << "ERF : ILA DB Connection error" << endl;
 
-			  //If ILA can't connect to DB, use ????
+			  //Generate unique temp file, we will rename it once DB online
+			  	unsigned int nanotime = getSystemNanotime();
+			  	ostringstream temp;
+			  	temp << nanotime;
 
 				// Insert timestamp to file
-				filename = processname + "_" + currentDateTime(false) + ".log";
-				erffile = processname + "_" + currentDateTime(false) + ".erf";
+				filename = processname + "_ERFTEMP_" + temp.str() + ".log";
+				erffile = processname + "_ERFTEMP_" + temp.str() + ".erf";
+
+				//write ERF OFFLINE since the beginning
+				writeLogFile("========= ERF OFFLINE ===========");
 
 		  }else
 		  {
@@ -67,6 +76,8 @@ public:
 			 // Insert new .log file with blank hash
 			 insertNewFileToDB(filename);
 		  }
+
+		writeERFFile("initial seed : "+initseed);
 
 
 	};
@@ -82,14 +93,17 @@ private:
 	const string currentDateTime(bool withtime);
 	string getNextFileName(string fn_withdate);
 	string getInitialSecret();
+	unsigned int getSystemNanotime();
 
 	string processname;
 	string filename;
 	string erffile;
 	string s_hash; // current hash
+	string initseed; // remember first seed and insert to DB once DB back online
+	string DBHost;
+	unsigned int DBPort;
 	MYSQL* db;
 	bool isDBConnect;
-	bool isFirstLine;
 };
 
 
