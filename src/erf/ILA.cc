@@ -188,6 +188,7 @@ void ILA::onDateChange()
 
 	//regenerate initial seed
 	s_hash=getInitialSecret();
+	initseed = s_hash;
 
 	if(isDBConnect)
 	{
@@ -197,6 +198,8 @@ void ILA::onDateChange()
 		erffile = processname + "_" + currentDateTime(false) + ".erf";
 
 		insertNewFileToDB(filename);
+		writeERFFile("initial seed : "+initseed);
+
 	}else
 	{
 		writeERFFile("ERF : DB connection FAIL while Date Roll, create unique ERFTEMP log..");

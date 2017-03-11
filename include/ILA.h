@@ -20,7 +20,7 @@ public:
 		isDBConnect = false;
 	    processname = fn.substr(0,fn.length()-4);
 
-	    DBHost = "192.168.1.4";
+	    DBHost = "localhost";
 	    DBPort = 3306;
 
 		// -----------------------------------------------------------
@@ -38,7 +38,7 @@ public:
 		// -----------------------------------------------------------
 
 		ostringstream oss;
-		cout <<  "ILA Version 1.2" << endl;
+		cout <<  "ILA Version 1.3" << endl;
 		cout <<  "ERF : MySQL client version:" << mysql_get_client_info() << endl;
 
 		db = mysql_init(NULL);
