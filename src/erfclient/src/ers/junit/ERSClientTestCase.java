@@ -23,70 +23,124 @@ public class ERSClientTestCase {
 	public void tearDown() throws Exception {
 		
 		//testSingleFile_DBStable
-		new File("oned_20170301.log").delete();
-		new File("oned_20170301_1.log").delete();
-		new File("oned_20170301_2.log").delete();
-		new File("oned_20170301_3.log").delete();
-		new File("oned_20170301_4.log").delete();
-		new File("oned_20170301_5.log").delete();
-		new File("oned_20170301_6.log").delete();
-		new File("oned_20170301_7.log").delete();
+		new File("oned_20170305.log").delete();
+		new File("oned_20170305_0001.log").delete();
+		new File("oned_20170305_0002.log").delete();
+		new File("oned_20170305_0003.log").delete();
+		new File("oned_20170305_0004.log").delete();
+		new File("oned_20170305_0005.log").delete();
+		new File("oned_20170305_0006.log").delete();
+		new File("oned_20170305_0007.log").delete();
 		
 		//testDateRoll_DBStable
-		new File("oned_20170302.log").delete();
-		new File("oned_20170304.log").delete();
 		new File("oned_20170306.log").delete();
 		new File("oned_20170308.log").delete();
 		new File("oned_20170310.log").delete();
 		new File("oned_20170312.log").delete();
 		new File("oned_20170314.log").delete();
 		new File("oned_20170316.log").delete();
+		new File("oned_20170318.log").delete();
+		new File("oned_20170320.log").delete();
 		
-		new File("oned_20170303.log").delete();
-		new File("oned_20170305.log").delete();
 		new File("oned_20170307.log").delete();
 		new File("oned_20170309.log").delete();
 		new File("oned_20170311.log").delete();
 		new File("oned_20170313.log").delete();
 		new File("oned_20170315.log").delete();
 		new File("oned_20170317.log").delete();
+		new File("oned_20170319.log").delete();
+		new File("oned_20170321.log").delete();
+		
+		new File("oned_20170322.log").delete();
+		new File("oned_20170322_0001.log").delete();
+		new File("oned_20170322_0002.log").delete();
+		new File("oned_20170322_0003.log").delete();
+		
+		new File("oned_20170322_0004.log").delete();
+		new File("oned_20170322_0005.log").delete();
+		new File("oned_20170322_0006.log").delete();
+		new File("oned_20170322_0007.log").delete();
+		
+		new File("oned_20170322_0008.log").delete();
+		new File("oned_20170322_0009.log").delete();
+		new File("oned_20170322_0010.log").delete();
+		new File("oned_20170322_0011.log").delete();
+		
+		new File("oned_20170322_0012.log").delete();
+		new File("oned_20170322_0013.log").delete();
+		new File("oned_20170322_0014.log").delete();
+		new File("oned_20170322_0015.log").delete();
+		new File("oned_20170322_0016.log").delete();
+		
+		new File("oned_ERFTEMP_137866337.log").delete();
+		new File("oned_ERFTEMP_598265023.log").delete();
 	}
 
-	@Test
+	//@Test
 	public void testSingleFile_DBStable() {
 		
-		assertEquals(erfclient.ERF_UnTrust,erfApp.getEvidence("e oned_20170301.log"));
-		assertEquals(erfclient.ERF_UnTrust,erfApp.getEvidence("e oned_20170301_1.log"));
-		assertEquals(erfclient.ERF_UnTrust,erfApp.getEvidence("e oned_20170301_2.log"));
-		assertEquals(erfclient.ERF_Trust,  erfApp.getEvidence("e oned_20170301_3.log"));
-		assertEquals(erfclient.ERF_UnTrust,erfApp.getEvidence("e oned_20170301_4.log"));
-		assertEquals(erfclient.ERF_UnTrust,erfApp.getEvidence("e oned_20170301_5.log"));
-		assertEquals(erfclient.ERF_UnTrust,erfApp.getEvidence("e oned_20170301_6.log"));
-		assertEquals(erfclient.ERF_UnTrust,erfApp.getEvidence("e oned_20170301_7.log"));
-		
+		assertEquals(erfclient.ERF_UnTrust,		erfApp.getEvidence("e oned_20170305.log"));
+		assertEquals(erfclient.ERF_UnTrust,		erfApp.getEvidence("e oned_20170305_0001.log"));
+		assertEquals(erfclient.ERF_UnTrust,		erfApp.getEvidence("e oned_20170305_0002.log"));
+		assertEquals(erfclient.ERF_Trust,  		erfApp.getEvidence("e oned_20170305_0003.log"));
+		assertEquals(erfclient.ERF_UnTrust,		erfApp.getEvidence("e oned_20170305_0004.log"));
+		assertEquals(erfclient.ERF_UnTrust,		erfApp.getEvidence("e oned_20170305_0005.log"));
+		assertEquals(erfclient.ERF_UnTrust,		erfApp.getEvidence("e oned_20170305_0006.log"));
+		assertEquals(erfclient.ERF_UnTrust,		erfApp.getEvidence("e oned_20170305_0007.log"));	
 
 	}
 	
-	@Test
+	//@Test
 	public void testDateRoll_DBStable() {
 		
-		assertEquals(erfclient.ERF_UnTrust,erfApp.getEvidence("e oned_20170302.log"));
-		assertEquals(erfclient.ERF_UnTrust,erfApp.getEvidence("e oned_20170304.log"));
-		assertEquals(erfclient.ERF_UnTrust,erfApp.getEvidence("e oned_20170306.log"));
-		assertEquals(erfclient.ERF_Trust,  erfApp.getEvidence("e oned_20170308.log"));
-		assertEquals(erfclient.ERF_UnTrust,erfApp.getEvidence("e oned_20170310.log"));
-		assertEquals(erfclient.ERF_UnTrust,erfApp.getEvidence("e oned_20170312.log"));
-		assertEquals(erfclient.ERF_UnTrust,erfApp.getEvidence("e oned_20170314.log"));
-		assertEquals(erfclient.ERF_UnTrust,erfApp.getEvidence("e oned_20170316.log"));
+	
+		assertEquals(erfclient.ERF_UnTrust,		erfApp.getEvidence("e oned_20170306.log"));
+		assertEquals(erfclient.ERF_UnTrust,		erfApp.getEvidence("e oned_20170308.log"));
+		assertEquals(erfclient.ERF_UnTrust,		erfApp.getEvidence("e oned_20170310.log"));
+		assertEquals(erfclient.ERF_Trust,		erfApp.getEvidence("e oned_20170312.log"));
+		assertEquals(erfclient.ERF_UnTrust,		erfApp.getEvidence("e oned_20170314.log"));
+		assertEquals(erfclient.ERF_UnTrust,		erfApp.getEvidence("e oned_20170316.log"));
+		assertEquals(erfclient.ERF_UnTrust,		erfApp.getEvidence("e oned_20170318.log"));
+		assertEquals(erfclient.ERF_UnTrust,		erfApp.getEvidence("e oned_20170320.log"));
 		
-		assertEquals(erfclient.ERF_UnTrust,erfApp.getEvidence("e oned_20170303.log"));
-		assertEquals(erfclient.ERF_UnTrust,erfApp.getEvidence("e oned_20170305.log"));
-		assertEquals(erfclient.ERF_UnTrust,erfApp.getEvidence("e oned_20170306.log"));
-		assertEquals(erfclient.ERF_Trust,  erfApp.getEvidence("e oned_20170309.log"));
-		assertEquals(erfclient.ERF_UnTrust,erfApp.getEvidence("e oned_20170311.log"));
-		assertEquals(erfclient.ERF_UnTrust,erfApp.getEvidence("e oned_20170313.log"));
-		assertEquals(erfclient.ERF_UnTrust,erfApp.getEvidence("e oned_20170315.log"));
-		assertEquals(erfclient.ERF_UnTrust,erfApp.getEvidence("e oned_20170317.log"));
+		
+		assertEquals(erfclient.ERF_UnTrust,		erfApp.getEvidence("e oned_20170307.log"));
+		assertEquals(erfclient.ERF_UnTrust,		erfApp.getEvidence("e oned_20170309.log"));
+		assertEquals(erfclient.ERF_UnTrust,		erfApp.getEvidence("e oned_20170311.log"));
+		assertEquals(erfclient.ERF_Trust,		erfApp.getEvidence("e oned_20170313.log"));
+		assertEquals(erfclient.ERF_UnTrust,		erfApp.getEvidence("e oned_20170315.log"));
+		assertEquals(erfclient.ERF_UnTrust,		erfApp.getEvidence("e oned_20170317.log"));
+		assertEquals(erfclient.ERF_UnTrust,		erfApp.getEvidence("e oned_20170319.log"));
+		assertEquals(erfclient.ERF_UnTrust,		erfApp.getEvidence("e oned_20170321.log"));
+	}
+	
+	@Test
+	public void testDBConnectionissue(){
+		
+		assertEquals(erfclient.ERF_PartialTrust,	erfApp.getEvidence("e oned_20170322.log"));
+		assertEquals(erfclient.ERF_UnTrust,			erfApp.getEvidence("e oned_20170322_0001.log"));
+		assertEquals(erfclient.ERF_PartialTrust,	erfApp.getEvidence("e oned_20170322_0002.log"));
+		assertEquals(erfclient.ERF_UnTrust,			erfApp.getEvidence("e oned_20170322_0003.log"));
+		
+		assertEquals(erfclient.ERF_Trust,			erfApp.getEvidence("e oned_20170322_0004.log"));
+		assertEquals(erfclient.ERF_UnTrust,			erfApp.getEvidence("e oned_20170322_0005.log"));
+		assertEquals(erfclient.ERF_UnTrust,			erfApp.getEvidence("e oned_20170322_0006.log"));
+		assertEquals(erfclient.ERF_UnTrust,			erfApp.getEvidence("e oned_20170322_0007.log"));
+		
+		assertEquals(erfclient.ERF_Trust,			erfApp.getEvidence("e oned_20170322_0008.log"));
+		assertEquals(erfclient.ERF_UnTrust,			erfApp.getEvidence("e oned_20170322_0009.log"));
+		assertEquals(erfclient.ERF_UnTrust,			erfApp.getEvidence("e oned_20170322_0010.log"));
+		assertEquals(erfclient.ERF_UnTrust,			erfApp.getEvidence("e oned_20170322_0011.log"));
+		
+		assertEquals(erfclient.ERF_PartialTrust,	erfApp.getEvidence("e oned_20170322_0012.log"));
+		assertEquals(erfclient.ERF_UnTrust,			erfApp.getEvidence("e oned_20170322_0013.log"));
+		assertEquals(erfclient.ERF_UnTrust,			erfApp.getEvidence("e oned_20170322_0014.log"));
+		assertEquals(erfclient.ERF_PartialTrust,	erfApp.getEvidence("e oned_20170322_0015.log"));
+		assertEquals(erfclient.ERF_UnTrust,			erfApp.getEvidence("e oned_20170322_0016.log"));
+		
+		assertEquals(erfclient.ERF_UnTrust,			erfApp.getEvidence("e oned_ERFTEMP_137866337.log"));
+		assertEquals(erfclient.ERF_UnTrust,			erfApp.getEvidence("e oned_ERFTEMP_598265023.log"));
+		
 	}
 
 }
