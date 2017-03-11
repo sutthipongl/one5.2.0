@@ -257,28 +257,32 @@ public String getEvidence(String cmd)
 	  
 	    while ((line = br.readLine()) != null) {
 	       // process the line.
+	    	boolean isERFLine = false;
 	    	
-	    	
-	    	//Found ERF Mark LINE , update flag and calculate hash as usual
+	    	//Found ERF Mark LINE , update flag
 	    	if(line.equals(ERF_OFFLINE))
 	    	{	
 	    		isOnLine=false;
-	    		
-	    		
+	    		isERFLine=true;
+	    			
 	    	}else if(line.equals(ERF_ONLINE))
 	    	{	
 	    		isOnLine=true;
-	    		
+	    		isERFLine=true;
 	    	}
 	    	
 	    	//Always calculate hash if it's not ERF_MARK line
-	    	seed = sha256(line+seed);
-	    	
+	    	if(!isERFLine)
+	    	{
+	    		seed = sha256(line+seed);
+	    		System.out.println("authening : "+line);
+	    	}
+	    		
 	    	// return last online log
 	    	if(isOnLine)
 	    		result = seed;
 	    	
-	    	System.out.println("authening : "+line);
+	    	
 	    	System.out.println("current : "+seed);
 	    	System.out.println("result : "+result);
 	    }
