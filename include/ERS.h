@@ -23,7 +23,7 @@ public:
 
 	ERSService(){
 
-		DBHost = "192.168.1.4";
+		DBHost = "localhost";
 		DBPort = 3306;
 
 		cout <<  "ERS Version 1.2 Build 4 Mar 2017" << endl;

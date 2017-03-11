@@ -61,6 +61,7 @@ void ERSSecretRetrivalMethod::execute(xmlrpc_c::paramList const& paramList,
 
    					//can't connect DB, return empty result
    					*retvalP = xmlrpc_c::value_string(" | ");
+   					return;
 
    			  }else
    			  {
@@ -72,6 +73,8 @@ void ERSSecretRetrivalMethod::execute(xmlrpc_c::paramList const& paramList,
    					{
    					   //Nothing return, This is the first file for that day
    					  cout << "ERSSecretRetrivalMethod : Can't find secret for " << fn << endl;
+   					  *retvalP = xmlrpc_c::value_string(" | ");
+   					  return;
    					}
 
    				  string hash = row[0] ;
