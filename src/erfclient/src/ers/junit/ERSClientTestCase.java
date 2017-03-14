@@ -72,11 +72,11 @@ public class ERSClientTestCase {
 		new File("oned_20170322_0015.log").delete();
 		new File("oned_20170322_0016.log").delete();
 		
-		new File("oned_ERFTEMP_137866337.log").delete();
-		new File("oned_ERFTEMP_598265023.log").delete();
+		new File("oned663547601_ERFTEMP.log").delete();
+		new File("oned91527697_ERFTEMP.log").delete();
 	}
 
-	//@Test
+	@Test
 	public void testSingleFile_DBStable() {
 		
 		assertEquals(erfclient.ERF_UnTrust,		erfApp.getEvidence("e oned_20170305.log"));
@@ -90,7 +90,7 @@ public class ERSClientTestCase {
 
 	}
 	
-	//@Test
+	@Test
 	public void testDateRoll_DBStable() {
 		
 	
@@ -138,9 +138,21 @@ public class ERSClientTestCase {
 		assertEquals(erfclient.ERF_PartialTrust,	erfApp.getEvidence("e oned_20170322_0015.log"));
 		assertEquals(erfclient.ERF_UnTrust,			erfApp.getEvidence("e oned_20170322_0016.log"));
 		
-		assertEquals(erfclient.ERF_UnTrust,			erfApp.getEvidence("e oned_ERFTEMP_137866337.log"));
-		assertEquals(erfclient.ERF_UnTrust,			erfApp.getEvidence("e oned_ERFTEMP_598265023.log"));
+		assertEquals(erfclient.ERF_UnTrust,			erfApp.getEvidence("e oned663547601_ERFTEMP.log"));
+		assertEquals(erfclient.ERF_UnTrust,			erfApp.getEvidence("e oned91527697_ERFTEMP.log"));
 		
 	}
 
+	
+	@Test
+	public void testRollDateDBConnectionissue(){
+		
+		assertEquals(erfclient.ERF_UnTrust,	erfApp.getEvidence("e oned_ERFTEMP_652570501.log"));
+		assertEquals(erfclient.ERF_Trust,			erfApp.getEvidence("e oned_20170326.log"));
+		assertEquals(erfclient.ERF_UnTrust,	erfApp.getEvidence("e oned_20170328.log"));
+		assertEquals(erfclient.ERF_UnTrust,			erfApp.getEvidence("e oned_20170330.log"));
+		
+	
+		
+	}
 }
