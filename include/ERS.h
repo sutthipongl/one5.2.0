@@ -1,6 +1,7 @@
 #include <cassert>
 #include <stdexcept>
 #include <iostream>
+#include <fstream>
 #include <sstream>
 #include <string>
 #include <unistd.h>
@@ -14,19 +15,66 @@ using namespace std;
 #include "mysql/mysql.h"
 #include <mysql/errmsg.h>
 
+
 class ERSService
 {
 public:
 
-	string DBHost;
-	int DBPort;
-
 	ERSService(){
+
+		 //ERFDB
 
 		DBHost = "localhost";
 		DBPort = 3306;
+		DBname = "opennebula";
+		DBusername = "oneadmin";
+		DBpasswd = "oneadmin";
 
-		cout <<  "ERS Version 1.2 Build 4 Mar 2017" << endl;
+		string confline;
+		ifstream ersconfig("/etc/one/ers.conf");
+
+		if (ersconfig.is_open())
+		{
+			while ( getline (ersconfig,confline) )
+				{
+					if(confline.length()!=0)
+					{
+						string key = confline.substr(0,confline.find("=")) ;
+						string value = confline.substr(confline.find("=")+1,confline.length());
+						cout << "ERS.cnf : " << key << endl;
+						cout << "ERS.cnf : " << value << endl;
+
+						if(key.compare("ERSDBHost")==0)
+							DBHost = value;
+						else if (key.compare("ERSDBPort")==0)
+						{
+							istringstream   is;
+							is.str(value);
+							is >> DBPort;
+						}
+						else if (key.compare("ERSDBName")==0)
+							DBname = value;
+						else if (key.compare("ERSDBUsername")==0)
+							DBusername = value;
+						else if (key.compare("ERSDBPassword")==0)
+							DBpasswd = value;
+					}
+
+				}
+			ersconfig.close();
+		}
+
+	  else cout << "Unable to open ERS config file, use default";
+
+
+		 cout << "ERSDB HOST " << DBHost << endl;
+		 cout << "ERSDB Port " << DBPort << endl;
+		 cout << "ERSDB NAME " << DBname << endl;
+		 cout << "ERSDB USER " << DBusername << endl;
+		 cout << "ERSDB PASSWD " << DBpasswd << endl;
+
+
+		cout <<  "ERS Version 1.3 Build 10 Mar 2017" << endl;
 
 		db = mysql_init(NULL);
 
@@ -35,7 +83,7 @@ public:
 			cout << "ERSManager : can't init mysql " << mysql_error(db) << endl;
 		}else
 		{
-			if (mysql_real_connect(db, DBHost.c_str(),"oneadmin","oneadmin", "opennebula",DBPort, NULL, 0)==NULL)
+			if (mysql_real_connect(db, DBHost.c_str(),DBusername.c_str(),DBpasswd.c_str(), DBname.c_str(),DBPort, NULL, 0)==NULL)
 				  {
 					  cout << "ERSManager : ERS DB Connection error" << endl;
 
@@ -55,11 +103,15 @@ public:
 
 
 private:
-
-xmlrpc_c::serverAbyss* ERSServer;
-xmlrpc_c::registry ERSRegistry;
-MYSQL* db;
-bool isDBCon = false;
+	string DBHost;
+	unsigned int DBPort;
+	string DBname;
+	string DBusername;
+	string DBpasswd;
+	xmlrpc_c::serverAbyss* ERSServer;
+	xmlrpc_c::registry ERSRegistry;
+	MYSQL* db;
+	bool isDBCon = false;
 
 
 };
