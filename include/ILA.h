@@ -6,6 +6,7 @@
 #include <sstream> // std::ostringstream
 #include "mysql/mysql.h"
 #include <mysql/errmsg.h>
+#include "NebulaTemplate.h"
 
 using namespace std;
 
@@ -15,13 +16,48 @@ class ILA
 public:
 	ILA(const string fn):filename(fn){
 
+		onedconf = new OpenNebulaTemplate("/etc/one/", "/var/lib/one/");
+		int rc = onedconf->load_configuration();
+
+		    if ( rc != 0 )
+		    {
+		        throw runtime_error("ERF : Could not load nebula configuration file.");
+		    }
+
 		s_hash=getInitialSecret();
 		initseed = s_hash;
 		isDBConnect = false;
 	    processname = fn.substr(0,fn.length()-4);
 
+	    //ERFDB
 	    DBHost = "localhost";
-	    DBPort = 3306;
+	  	DBPort = 3306;
+	  	DBname = "opennebula";
+		DBusername = "oneadmin";
+		DBpasswd = "oneadmin";
+
+		 const VectorAttribute * _erfdb = onedconf->get("ERFDB");
+
+		 if ( _erfdb != 0 )
+		 {
+			 DBHost = _erfdb->vector_value("SERVER");
+			 DBusername = _erfdb->vector_value("USER");
+			 DBpasswd = _erfdb->vector_value("PASSWD");
+			 DBname = _erfdb->vector_value("DB_NAME");
+			 string port =  _erfdb->vector_value("PORT");
+
+			 istringstream   is;
+			 is.str(port);
+			 is >> DBPort;
+		 }
+
+		 cout << "ERFDB HOST " << DBHost << endl;
+		 cout << "ERFDB Port " << DBPort << endl;
+		 cout << "ERFDB NAME " << DBname << endl;
+		 cout << "ERFDB USER " << DBusername << endl;
+		 cout << "ERFDB PASSWD " << DBpasswd << endl;
+
+
 
 		// -----------------------------------------------------------
 		// MYSQL Database
@@ -38,7 +74,7 @@ public:
 		// -----------------------------------------------------------
 
 		ostringstream oss;
-		cout <<  "ILA Version 1.3" << endl;
+		cout <<  "ILA Version 1.4 - 9 Mar 2017" << endl;
 		cout <<  "ERF : MySQL client version:" << mysql_get_client_info() << endl;
 
 		db = mysql_init(NULL);
@@ -49,9 +85,9 @@ public:
 		     // exit(1);
 		  }
 
-		if (mysql_real_connect(db, DBHost.c_str(),"oneadmin","oneadmin", "opennebula",DBPort, NULL, 0)==NULL)
+		if (mysql_real_connect(db, DBHost.c_str(),DBusername.c_str(),DBpasswd.c_str(), DBname.c_str(),DBPort, NULL, 0)==NULL)
 		  {
-			  cout << "ERF : ILA DB Connection error" << endl;
+			  	 cout << "ERF : ILA DB Connection error" << endl;
 
 			  //Generate unique temp file, we will rename it once DB online
 			  	unsigned int nanotime = getSystemNanotime();
@@ -59,14 +95,15 @@ public:
 			  	temp << nanotime;
 
 				// Insert timestamp to file
-				filename = processname + "_ERFTEMP_" + temp.str() + ".log";
-				erffile = processname + "_ERFTEMP_" + temp.str() + ".erf";
+				filename = processname + temp.str() + "_ERFTEMP" + ".log";
+				erffile = processname + temp.str()  + "_ERFTEMP" + ".erf";
 
 				//write ERF OFFLINE since the beginning
 				writeLogFile("========= ERF OFFLINE ===========");
 
 		  }else
 		  {
+
 			  isDBConnect=true;
 			  string temp_filename = getNextFileName(processname + "_" + currentDateTime(false));
 
@@ -95,13 +132,18 @@ private:
 	string getInitialSecret();
 	unsigned int getSystemNanotime();
 
+
 	string processname;
 	string filename;
+	OpenNebulaTemplate * onedconf;
 	string erffile;
 	string s_hash; // current hash
 	string initseed; // remember first seed and insert to DB once DB back online
 	string DBHost;
 	unsigned int DBPort;
+	string DBname;
+	string DBusername;
+	string DBpasswd;
 	MYSQL* db;
 	bool isDBConnect;
 };

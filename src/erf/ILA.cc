@@ -32,12 +32,12 @@ void ILA::onNewMessage(string s)
 		{
 			writeERFFile("ERF : Reconnecting DB.......");
 			// Try to re-connect
-			if (mysql_real_connect(db,DBHost.c_str(),"oneadmin","oneadmin", "opennebula",DBPort, NULL, 0))
+			if (mysql_real_connect(db, DBHost.c_str(),DBusername.c_str(),DBpasswd.c_str(), DBname.c_str(),DBPort, NULL, 0))
 					{
 							writeERFFile("ERF : Reconnected.");
 
 							// check if it's ERFTEMP file
-							if(filename.find("_ERFTEMP_")!=string::npos)
+							if(filename.find("ERFTEMP")!=string::npos)
 							{
 								writeERFFile("ERF : Current log is ERFTEMP file , renaming......");
 								string new_filename = getNextFileName(processname + "_" + currentDateTime(false));
@@ -230,6 +230,14 @@ string ILA::getNextFileName(string fn_withdate)
 			  {
 					writeERFFile("ERF : FAIL running " + oss.str());
 					writeERFFile(mysql_error(db));
+
+					 // If ILA connected DB but DBname is wrong, ILA can't find next number
+					 //Generate unique temp file, we will rename it once DB online
+					unsigned int nanotime = getSystemNanotime();
+					ostringstream temp;
+					temp << nanotime;
+
+					return processname + temp.str() + "_ERFTEMP" ;
 
 			  }else
 			  {
