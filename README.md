@@ -66,13 +66,17 @@ start script already include ERS service. To control ERS process individaully, w
 
 > service ers stop
 > service ers start
+
+ERS need to access ERF DB to query secret and hash value.
+- DB configuration : /etc/one/ers.conf
+
 ### ERF Client application java project
 - ~/one5.2.0/src/erfclient
-- DB configuration : /etc/one/ers.conf
+
 
 # DEMO
 1. Start OpenNebula. When we start VM instance, OpenNebula and ERS service should be live automatically. However, we can control via script mentioned in first section.
 2. OpenNebula will generate log file in */var/log/one*. 
 3. To retrive evidence
-3.1 we need to ensure that *ers* service is running
-3.2 run ERFClient and follow the menu
+- we need to ensure that *ers* service is running
+- run ERFClient and follow the menu
