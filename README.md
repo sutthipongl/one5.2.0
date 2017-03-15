@@ -4,17 +4,21 @@
 Original guide
 https://github.com/OpenNebula/one/blob/master/README.md
 # Path
-- OS username/passwd : oneadmin/oneadmin
-- MySQL username/passwd : oneadmin/oneadmin
+- Opennebula home : /home/oneadmin/one5.2.0
+- Log file path : /var/log/one
+- Sunstone : http://localhost:9869/
+# Script
 - Start script : /home/oneadmin/one5.2.0/start
 - ReStart script : /home/oneadmin/one5.2.0/restart
 - Stop script : /home/oneadmin/one5.2.0/stop
 - Rebuild script : /home/oneadmin/one5.2.0/rebuild
 - ERF table truncate : /home/oneadmin/one5.2.0/truncateERFTable.sh
 - ERFClient run script : /home/oneadmin/one5.2.0/erfclientApp/run
-- Sunstone : http://localhost:9869/
+# Credential
+- OS username/passwd : oneadmin/oneadmin
+- MySQL username/passwd : oneadmin/oneadmin
 - Sunstone credential : oneadmin/oneadmin
-- Log file path : /var/log/one
+
 # Implementation 
 
 This version is slightly different from the design due to 2 reasons
@@ -44,6 +48,7 @@ We store secret in new table
 >		CREATE TABLE `ERF` (
 >		  `filename` varchar(100) NOT NULL,
 >		  `hash` varchar(65) DEFAULT NULL,
+> 		  `secret` varchar(65) NOT NULL,
 >		  `lastupdate` datetime DEFAULT NULL,
 >		  PRIMARY KEY (`filename`)
 >		) ;
@@ -63,6 +68,7 @@ start script already include ERS service. To control ERS process individaully, w
 > service ers start
 ### ERF Client application java project
 - ~/one5.2.0/src/erfclient
+- DB configuration : /etc/one/ers.conf
 
 # DEMO
 1. Start OpenNebula. When we start VM instance, OpenNebula and ERS service should be live automatically. However, we can control via script mentioned in first section.
